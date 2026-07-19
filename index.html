@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>SocialElite Admin Login</title>
+
+<link rel="stylesheet"
+href="admin-login.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="background-glow glow1"></div>
+<div class="background-glow glow2"></div>
+
+<div class="login-container">
+
+<div class="login-card">
+
+<div class="logo-box">
+
+<img
+src="images/logo.png"
+alt="SocialElite Logo"
+class="logo">
+
+<h1>SocialElite</h1>
+
+<p class="portal-text">
+Administrator Portal
+</p>
+
+</div>
+
+<div
+id="errorMessage"
+class="error-message"
+style="display:none;">
+</div>
+
+<form id="adminLoginForm">
+
+<div class="input-group">
+
+<label for="email">
+
+Email Address
+
+</label>
+
+<input
+type="email"
+id="email"
+placeholder="admin@socialelite.com"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label for="password">
+
+Password
+
+</label>
+
+<div class="password-box">
+
+<input
+type="password"
+id="password"
+placeholder="Enter password"
+required>
+
+<button
+type="button"
+id="togglePassword"
+class="toggle-btn">
+
+👁
+
+</button>
+
+</div>
+
+                                     </div>
+                                     <div class="login-options">
+
+<label class="remember-me">
+
+<input
+type="checkbox"
+id="rememberMe">
+
+<span>
+Keep me signed in
+</span>
+
+</label>
+
+</div>
+
+<button
+type="submit"
+id="loginBtn"
+class="login-btn">
+
+<span id="loginText">
+Login to Admin Panel
+</span>
+
+<span
+id="loginLoader"
+class="loader"
+style="display:none;">
+</span>
+
+</button>
+
+</form>
+
+<div class="security-box">
+
+<h3>
+🔒 Authorized Personnel Only
+</h3>
+
+<p>
+
+This administration portal is restricted
+to authorized SocialElite administrators.
+
+All login attempts are monitored
+and unauthorized access is prohibited.
+
+</p>
+
+</div>
+
+<div class="admin-footer">
+
+<p>
+
+© 2026 SocialElite
+
+</p>
+
+<p>
+
+Secure Administration System
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="admin-login.js"></script>
+
+</body>
+
+</html>
