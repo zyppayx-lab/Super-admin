@@ -1,20 +1,22 @@
-// ===============================
-// Supabase Configuration
-// ===============================
+// ==============================
+// Supabase
+// ==============================
 
-const SUPABASE_URL = "https://dohxtukzxopwkvxeppdl.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_KHU_8oYCtAgiBkWM_ShXmw_nO7FKnG7";
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
 );
 
-// ===============================
-// Elements
-// ===============================
 
-const loginForm = document.getElementById("adminLoginForm");
+// ==============================
+// Elements
+// ==============================
+
+const form = document.getElementById("adminLoginForm");
+
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
@@ -23,11 +25,44 @@ const loginText = document.getElementById("loginText");
 const loginLoader = document.getElementById("loginLoader");
 
 const togglePassword = document.getElementById("togglePassword");
+
 const errorMessage = document.getElementById("errorMessage");
 
-// ===============================
-// Password Toggle
-// ===============================
+
+// ==============================
+// Helpers
+// ==============================
+
+function showError(message) {
+
+    errorMessage.style.display = "block";
+    errorMessage.textContent = message;
+
+}
+
+function hideError() {
+
+    errorMessage.style.display = "none";
+    errorMessage.textContent = "";
+
+}
+
+function setLoading(loading) {
+
+    loginBtn.disabled = loading;
+
+    loginText.style.display =
+        loading ? "none" : "inline";
+
+    loginLoader.style.display =
+        loading ? "inline-block" : "none";
+
+}
+
+
+// ==============================
+// Toggle Password
+// ==============================
 
 togglePassword.addEventListener("click", () => {
 
@@ -45,47 +80,12 @@ togglePassword.addEventListener("click", () => {
 
 });
 
-// ===============================
-// UI Helpers
-// ===============================
 
-function showError(message) {
+// ==============================
+// Existing Session Check
+// ==============================
 
-    errorMessage.style.display = "block";
-    errorMessage.textContent = message;
-
-}
-
-function hideError() {
-
-    errorMessage.style.display = "none";
-    errorMessage.textContent = "";
-
-}
-
-function setLoading(state) {
-
-    loginBtn.disabled = state;
-
-    if (state) {
-
-        loginText.style.display = "none";
-        loginLoader.style.display = "inline-block";
-
-    } else {
-
-        loginText.style.display = "inline";
-        loginLoader.style.display = "none";
-
-    }
-
-}
-
-// ===============================
-// Redirect if already logged in
-// ===============================
-
-(async () => {
+async function checkSession() {
 
     const {
         data: { session }
@@ -93,46 +93,66 @@ function setLoading(state) {
 
     if (!session) return;
 
-    const {
-        data: isAdmin,
-        error
-    } = await supabase.rpc("is_admin", {
-        p_user_id: session.user.id
-    });
+    const { data: isAdmin } =
+        await supabase.rpc("is_admin", {
 
-    if (!error && isAdmin === true) {
+            p_user_id: session.user.id
 
-        window.location.replace("admin.html");
+        });
+
+    if (!isAdmin) {
+
+        await supabase.auth.signOut();
+
+        window.location.replace("admin-login.html");
+
+        return;
 
     }
 
-})();
-// ===============================
-// Admin Login
-// ===============================
+    window.location.replace("admin.html");
 
-loginForm.addEventListener("submit", async (e) => {
+}
+
+
+// ==============================
+// Start
+// ==============================
+
+checkSession();
+// ==============================
+// Login
+// ==============================
+
+form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
     hideError();
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+    const email =
+        emailInput.value.trim().toLowerCase();
+
+    const password =
+        passwordInput.value;
 
     if (!email || !password) {
+
         showError("Please enter your email and password.");
+
         return;
+
     }
 
     setLoading(true);
 
     try {
 
-        // Login
         const {
+
             data,
             error
+
         } = await supabase.auth.signInWithPassword({
 
             email,
@@ -142,28 +162,50 @@ loginForm.addEventListener("submit", async (e) => {
 
         if (error) {
 
-            showError(error.message);
+            showError("Invalid email or password.");
+
+            setLoading(false);
+
             return;
 
         }
 
-        const user = data.user;
+        const session = data.session;
 
-        // Verify admin role
+        if (!session) {
+
+            showError("Unable to create session.");
+
+            setLoading(false);
+
+            return;
+
+        }
+
         const {
+
             data: isAdmin,
             error: adminError
-        } = await supabase.rpc("is_admin", {
 
-            p_user_id: user.id
+        } = await supabase.rpc(
 
-        });
+            "is_admin",
+
+            {
+
+                p_user_id: session.user.id
+
+            }
+
+        );
 
         if (adminError) {
 
             await supabase.auth.signOut();
 
             showError("Unable to verify administrator.");
+
+            setLoading(false);
 
             return;
 
@@ -173,7 +215,9 @@ loginForm.addEventListener("submit", async (e) => {
 
             await supabase.auth.signOut();
 
-            showError("Access denied. Administrator account required.");
+            showError("Access denied.");
+
+            setLoading(false);
 
             return;
 
@@ -183,9 +227,9 @@ loginForm.addEventListener("submit", async (e) => {
 
     } catch (err) {
 
-        showError(
-            err.message || "Unexpected error occurred."
-        );
+        console.error(err);
+
+        showError("Something went wrong. Please try again.");
 
     } finally {
 
@@ -194,18 +238,89 @@ loginForm.addEventListener("submit", async (e) => {
     }
 
 });
+// ==============================
+// Auth State Listener
+// ==============================
 
-
-// ===============================
-// Session Listener
-// ===============================
-
-supabase.auth.onAuthStateChange((event) => {
+supabase.auth.onAuthStateChange(async (event, session) => {
 
     if (event === "SIGNED_OUT") {
 
         window.location.replace("admin-login.html");
+        return;
+
+    }
+
+    if (event === "TOKEN_REFRESHED") {
+
+        if (!session) {
+
+            window.location.replace("admin-login.html");
+            return;
+
+        }
+
+        const { data: isAdmin } = await supabase.rpc(
+            "is_admin",
+            {
+                p_user_id: session.user.id
+            }
+        );
+
+        if (!isAdmin) {
+
+            await supabase.auth.signOut();
+
+            window.location.replace("admin-login.html");
+
+            return;
+
+        }
 
     }
 
 });
+
+
+// ==============================
+// Enter Key Support
+// ==============================
+
+emailInput.addEventListener("keydown", (e) => {
+
+    if (e.key === "Enter") {
+
+        passwordInput.focus();
+
+    }
+
+});
+
+passwordInput.addEventListener("keydown", (e) => {
+
+    if (e.key === "Enter") {
+
+        form.requestSubmit();
+
+    }
+
+});
+
+
+// ==============================
+// Prevent Multiple Clicks
+// ==============================
+
+loginBtn.addEventListener("dblclick", (e) => {
+
+    e.preventDefault();
+
+});
+
+
+// ==============================
+// Clear Error While Typing
+// ==============================
+
+emailInput.addEventListener("input", hideError);
+passwordInput.addEventListener("input", hideError);
