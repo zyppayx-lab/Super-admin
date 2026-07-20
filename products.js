@@ -6,7 +6,7 @@ const SUPABASE_URL =
 "https://dohxtukzxopwkvxeppdl.supabase.co";
 
 const SUPABASE_ANON_KEY =
-"sb_publishable_KHU_8oYCtAgiBkWM_ShXmw_nO7FKnG7";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaHh0dWt6eG9wd2t2eGVwcGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTA5NzksImV4cCI6MjA5ODc2Njk3OX0.EvzBxG--UmAIDL6dX-cU878tjRRHacazKv9mbEsGgWY";
 
 const supabaseClient =
 window.supabase.createClient(
@@ -19,20 +19,11 @@ window.supabase.createClient(
 // Elements
 // ===============================
 
-const productsContainer =
-document.getElementById("productsContainer");
+const productsBody =
+document.getElementById("productsBody");
 
-const productModal =
-document.getElementById("productModal");
-
-const productForm =
-document.getElementById("productForm");
-
-const addProductBtn =
-document.getElementById("addProductBtn");
-
-const closeModal =
-document.getElementById("closeModal");
+const categoryFilter =
+document.getElementById("categoryFilter");
 
 const categorySelect =
 document.getElementById("category");
@@ -40,39 +31,55 @@ document.getElementById("category");
 const searchInput =
 document.getElementById("searchInput");
 
-const logoutBtn =
-document.getElementById("logoutBtn");
+const refreshBtn =
+document.getElementById("refreshBtn");
 
-let allProducts = [];
+const addProductBtn =
+document.getElementById("addProductBtn");
+
+const productModal =
+document.getElementById("productModal");
+
+const cancelBtn =
+document.getElementById("cancelBtn");
+
+const productForm =
+document.getElementById("productForm");
+
+const messageBox =
+document.getElementById("messageBox");
 
 
 // ===============================
-// Start
+// Variables
+// ===============================
+
+let adminUser = null;
+
+let allProducts = [];
+
+let allCategories = [];
+
+let editingProductId = null;
+
+
+// ===============================
+// Initialize
 // ===============================
 
 document.addEventListener(
 "DOMContentLoaded",
 async ()=>{
 
-    const access =
+    const allowed =
     await checkAdminAccess();
 
-    if(!access){
+    if(!allowed){
         return;
     }
 
-    addProductBtn.onclick = ()=>{
-        productModal.style.display = "flex";
-    };
-
-    closeModal.onclick = ()=>{
-        productModal.style.display = "none";
-        productForm.reset();
-    };
-
-    logoutBtn.onclick = ()=>{
-        adminLogout();
-    };
+    adminUser =
+    window.adminUser;
 
     await loadCategories();
 
@@ -85,35 +92,54 @@ async ()=>{
 
 async function loadCategories(){
 
-    const { data, error } =
-    await supabaseClient
-    .from("categories")
-    .select("id,name,platform")
-    .order("platform");
+    try{
 
-    if(error){
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .from("categories")
+        .select("*")
+        .order("name");
 
-        console.error(error);
+        if(error){
+            throw error;
+        }
 
-        return;
+        allCategories = data || [];
+
+        categoryFilter.innerHTML =
+        '<option value="">All Categories</option>';
+
+        categorySelect.innerHTML =
+        '<option value="">Select Category</option>';
+
+        allCategories.forEach(category=>{
+
+            categoryFilter.innerHTML += `
+                <option value="${category.id}">
+                    ${category.name}
+                </option>
+            `;
+
+            categorySelect.innerHTML += `
+                <option value="${category.id}">
+                    ${category.name}
+                </option>
+            `;
+
+        });
 
     }
+    catch(error){
 
-    categorySelect.innerHTML = `
-        <option value="">
-            Select Category
-        </option>
-    `;
+        showMessage(
+            error.message,
+            "error"
+        );
 
-    data.forEach(category=>{
-
-        categorySelect.innerHTML += `
-            <option value="${category.id}">
-                ${category.platform} • ${category.name}
-            </option>
-        `;
-
-    });
+    }
 
 }
 
@@ -125,306 +151,382 @@ async function loadCategories(){
 
 async function loadProducts(){
 
-    const { data, error } =
-    await supabaseClient
-    .from("products")
-    .select(`
-        *,
-        categories(
-            name,
-            platform
-        )
-    `)
-    .order("created_at",{
-        ascending:false
-    });
+    try{
 
-    if(error){
+        productsBody.innerHTML = `
 
-        console.error(error);
+        <tr>
 
-        productsContainer.innerHTML = `
-            <p>Failed to load products.</p>
+            <td colspan="7">
+
+                Loading products...
+
+            </td>
+
+        </tr>
+
         `;
 
-        return;
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .from("marketplace_products")
+        .select("*")
+        .order("created_at",{
+            ascending:false
+        });
+
+        if(error){
+            throw error;
+        }
+
+        allProducts = data || [];
+
+        renderProducts(
+            allProducts
+        );
+
+    }
+    catch(error){
+
+        productsBody.innerHTML = `
+
+        <tr>
+
+            <td colspan="7">
+
+                Failed to load products.
+
+            </td>
+
+        </tr>
+
+        `;
+
+        showMessage(
+            error.message,
+            "error"
+        );
 
     }
 
-    allProducts = data;
-
-    renderProducts(allProducts);
-
 }
-
-
-
 // ===============================
 // Render Products
 // ===============================
 
 function renderProducts(products){
 
-    productsContainer.innerHTML = "";
+    if(products.length === 0){
 
-    if(products.length===0){
-
-        productsContainer.innerHTML = `
-            <p>No products found.</p>
+        productsBody.innerHTML = `
+        <tr>
+            <td colspan="7">
+                No products found.
+            </td>
+        </tr>
         `;
 
         return;
 
     }
 
+    productsBody.innerHTML = "";
+
     products.forEach(product=>{
 
-        productsContainer.innerHTML += `
+        const tr =
+        document.createElement("tr");
 
-        <div class="product-card">
+        tr.innerHTML = `
 
-            <h3>${product.name}</h3>
+        <td>${product.name}</td>
 
-            <p>
-                <strong>Platform:</strong>
-                ${product.categories?.platform ?? "-"}
-            </p>
+        <td>${product.category_name ?? "-"}</td>
 
-            <p>
-                <strong>Category:</strong>
-                ${product.categories?.name ?? "-"}
-            </p>
+        <td>₦${Number(product.price).toLocaleString()}</td>
 
-            <p>
-                <strong>Price:</strong>
-                ₦${Number(product.price).toLocaleString()}
-            </p>
+        <td>${product.type}</td>
 
-            <p>
-                <strong>Country:</strong>
-                ${product.country ?? "-"}
-            </p>
+        <td>${product.stock_type}</td>
 
-            <p>
-                <strong>Type:</strong>
-                ${product.type}
-            </p>
+        <td>
 
-            <p>
-                <strong>Stock:</strong>
-                ${product.stock_type}
-            </p>
+            <span class="${
+                product.status === "active"
+                ? "status-active"
+                : "status-inactive"
+            }">
 
-            <span class="badge">
                 ${product.status}
+
             </span>
 
-            <div class="actions">
+        </td>
 
-                <button
-                    class="edit-btn"
-                    data-id="${product.id}">
-                    Edit
-                </button>
+        <td>
 
-                <button
-                    class="delete-btn"
-                    data-id="${product.id}">
-                    Delete
-                </button>
+            <button
+                class="action-btn edit-btn"
+                onclick="editProduct('${product.id}')">
 
-            </div>
+                Edit
 
-        </div>
+            </button>
+
+            <button
+                class="action-btn delete-btn"
+                onclick="deleteProduct('${product.id}')">
+
+                Delete
+
+            </button>
+
+        </td>
 
         `;
+
+        productsBody.appendChild(tr);
 
     });
 
 }
+
+
+
 // ===============================
-// Search Products
+// Search
 // ===============================
 
 searchInput.addEventListener(
 "input",
 ()=>{
 
+    filterProducts();
+
+});
+
+
+
+// ===============================
+// Category Filter
+// ===============================
+
+categoryFilter.addEventListener(
+"change",
+()=>{
+
+    filterProducts();
+
+});
+
+
+
+// ===============================
+// Filter Logic
+// ===============================
+
+function filterProducts(){
+
     const keyword =
     searchInput.value
     .toLowerCase()
     .trim();
 
+    const category =
+    categoryFilter.value;
+
     const filtered =
     allProducts.filter(product=>{
 
+        const matchesSearch =
+
+            product.name
+            .toLowerCase()
+            .includes(keyword);
+
+        const matchesCategory =
+
+            !category ||
+
+            product.category_id === category;
+
         return (
-            product.name.toLowerCase().includes(keyword) ||
-
-            (product.categories?.platform || "")
-            .toLowerCase()
-            .includes(keyword) ||
-
-            (product.categories?.name || "")
-            .toLowerCase()
-            .includes(keyword) ||
-
-            (product.country || "")
-            .toLowerCase()
-            .includes(keyword)
+            matchesSearch &&
+            matchesCategory
         );
 
     });
 
     renderProducts(filtered);
 
-});
+}
 
 
 
 // ===============================
-// Create Product
+// Buttons
 // ===============================
 
-productForm.addEventListener(
-"submit",
-async(e)=>{
-
-    e.preventDefault();
-
-    const session =
-    await supabaseClient.auth.getSession();
-
-    const adminId =
-    session.data.session.user.id;
-
-    const payload = {
-
-        p_admin_id:
-        adminId,
-
-        p_category_id:
-        categorySelect.value,
-
-        p_name:
-        document.getElementById("name").value.trim(),
-
-        p_description:
-        document.getElementById("description").value.trim(),
-
-        p_price:
-        Number(
-            document.getElementById("price").value
-        ),
-
-        p_type:
-        document.getElementById("type").value.trim(),
-
-        p_stock_type:
-        document.getElementById("stockType").value
-
-    };
-
-
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.rpc(
-        "admin_create_product",
-        payload
-    );
-
-
-
-    if(error){
-
-        alert(error.message);
-
-        return;
-
-    }
-
-
-
-    alert("Product created successfully.");
-
-    productModal.style.display =
-    "none";
-
-    productForm.reset();
+refreshBtn.onclick = ()=>{
 
     loadProducts();
 
-});
+};
 
 
 
-// ===============================
-// Close Modal
-// ===============================
+addProductBtn.onclick = ()=>{
 
-window.onclick =
-(event)=>{
+    editingProductId = null;
 
-    if(
-        event.target === productModal
-    ){
+    productForm.reset();
 
-        productModal.style.display =
-        "none";
+    document
+    .getElementById("modalTitle")
+    .textContent =
+    "Add Product";
 
-    }
+    productModal.classList.remove(
+        "hidden"
+    );
+
+};
+
+
+
+cancelBtn.onclick = ()=>{
+
+    productModal.classList.add(
+        "hidden"
+    );
 
 };
 
 
 
 // ===============================
-// Delete Product
+// Placeholders
 // ===============================
 
-document.addEventListener(
-"click",
-async(event)=>{
+function editProduct(id){
 
-    if(
-        !event.target.classList.contains(
-            "delete-btn"
-        )
-    ){
-        return;
+    editingProductId = id;
+
+    alert(
+        "Edit Product will be implemented in Part 4."
+    );
+
+}
+
+
+
+function deleteProduct(id){
+
+    alert(
+        "Delete Product will be implemented in Part 4."
+    );
+
+}
+// ===============================
+// Save Product
+// ===============================
+
+productForm.addEventListener(
+"submit",
+async (e)=>{
+
+    e.preventDefault();
+
+    try{
+
+        const payload = {
+
+            p_admin_id: adminUser.id,
+
+            p_category_id:
+            document.getElementById("category").value,
+
+            p_name:
+            document.getElementById("name").value.trim(),
+
+            p_description:
+            document.getElementById("description").value.trim(),
+
+            p_price:
+            Number(
+                document.getElementById("price").value
+            ),
+
+            p_type:
+            document.getElementById("type").value,
+
+            p_stock_type:
+            document.getElementById("stockType").value
+
+        };
+
+
+        if(editingProductId){
+
+            const { error } =
+            await supabaseClient
+            .from("products")
+            .update({
+
+                category_id: payload.p_category_id,
+                name: payload.p_name,
+                description: payload.p_description,
+                price: payload.p_price,
+                type: payload.p_type,
+                stock_type: payload.p_stock_type
+
+            })
+            .eq("id", editingProductId);
+
+            if(error) throw error;
+
+            showMessage(
+                "Product updated successfully.",
+                "success"
+            );
+
+        }else{
+
+            const { error } =
+            await supabaseClient.rpc(
+                "admin_create_product",
+                payload
+            );
+
+            if(error) throw error;
+
+            showMessage(
+                "Product created successfully.",
+                "success"
+            );
+
+        }
+
+        productModal.classList.add("hidden");
+
+        productForm.reset();
+
+        editingProductId = null;
+
+        loadProducts();
+
     }
+    catch(error){
 
-    const id =
-    event.target.dataset.id;
-
-    if(
-        !confirm(
-            "Delete this product?"
-        )
-    ){
-        return;
-    }
-
-    const {
-        error
-    } =
-    await supabaseClient
-    .from("products")
-    .delete()
-    .eq("id",id);
-
-    if(error){
-
-        alert(error.message);
-
-        return;
+        showMessage(
+            error.message,
+            "error"
+        );
 
     }
-
-    loadProducts();
 
 });
 
@@ -434,20 +536,114 @@ async(event)=>{
 // Edit Product
 // ===============================
 
-document.addEventListener(
-"click",
-(event)=>{
+function editProduct(id){
+
+    const product =
+    allProducts.find(
+        p=>p.id===id
+    );
+
+    if(!product){
+        return;
+    }
+
+    editingProductId = id;
+
+    document.getElementById("modalTitle").textContent =
+    "Edit Product";
+
+    document.getElementById("category").value =
+    product.category_id;
+
+    document.getElementById("name").value =
+    product.name;
+
+    document.getElementById("description").value =
+    product.description || "";
+
+    document.getElementById("price").value =
+    product.price;
+
+    document.getElementById("type").value =
+    product.type;
+
+    document.getElementById("stockType").value =
+    product.stock_type;
+
+    productModal.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+
+// ===============================
+// Delete Product
+// ===============================
+
+async function deleteProduct(id){
 
     if(
-        !event.target.classList.contains(
-            "edit-btn"
+        !confirm(
+            "Delete this product?"
         )
     ){
         return;
     }
 
-    alert(
-        "Edit product page will be implemented next."
-    );
+    try{
 
-});
+        const { error } =
+        await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", id);
+
+        if(error){
+            throw error;
+        }
+
+        showMessage(
+            "Product deleted successfully.",
+            "success"
+        );
+
+        loadProducts();
+
+    }
+    catch(error){
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+
+// ===============================
+// Message Helper
+// ===============================
+
+function showMessage(
+message,
+type
+){
+
+    messageBox.innerHTML =
+
+    `<div class="${type}">
+        ${message}
+    </div>`;
+
+    setTimeout(()=>{
+
+        messageBox.innerHTML="";
+
+    },3000);
+
+            }
