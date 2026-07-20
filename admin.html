@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>SocialElite Admin Dashboard</title>
+
+<link rel="stylesheet"
+href="admin.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo-area">
+
+<img
+src="images/logo.png"
+class="logo"
+alt="Logo">
+
+<h2>SocialElite</h2>
+
+<p>Admin Panel</p>
+
+</div>
+
+<nav>
+
+<a href="admin.html"
+class="active">
+
+🏠 Dashboard
+
+</a>
+
+<a href="admin-products.html">
+
+📦 Products
+
+</a>
+
+<a href="admin-categories.html">
+
+📂 Categories
+
+</a>
+
+<a href="admin-inventory.html">
+
+🗄 Inventory
+
+</a>
+
+<a href="admin-orders.html">
+
+🛒 Orders
+
+</a>
+
+<a href="admin-sms-orders.html">
+
+📱 SMS Orders
+
+</a>
+
+<a href="admin-users.html">
+
+👥 Users
+
+</a>
+
+<a href="admin-wallet.html">
+
+💳 Wallet
+
+</a>
+
+<a href="admin-referrals.html">
+
+🎁 Referrals
+
+</a>
+
+<a href="admin-notifications.html">
+
+🔔 Notifications
+
+</a>
+
+<a href="admin-settings.html">
+
+⚙ Settings
+
+</a>
+
+</nav>
+
+<button
+id="logoutBtn"
+class="logout-btn">
+
+Logout
+
+</button>
+
+</div>
+
+<div class="main-content">
+
+<header class="topbar">
+
+<div>
+
+<h1>
+
+Dashboard
+
+</h1>
+
+<p>
+
+Welcome back, Administrator
+
+</p>
+
+</div>
+
+<div class="admin-profile">
+
+<img
+id="adminAvatar"
+src="images/default-avatar.png"
+alt="Avatar">
+
+<div>
+
+<h3 id="adminName">
+
+Loading...
+
+</h3>
+
+<span id="adminEmail">
+
+Loading...
+
+</span>
+
+</div>
+
+</div>
+
+</header>
+
+<section class="stats-grid">
+
+<div class="stat-card">
+
+<h4>Total Users</h4>
+
+<h2 id="totalUsers">
+
+--
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Total Products</h4>
+
+<h2 id="totalProducts">
+
+--
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Inventory</h4>
+
+<h2 id="totalInventory">
+
+--
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Orders</h4>
+
+<h2 id="totalOrders">
+
+--
+
+</h2>
+
+</div>
+<div class="stat-card">
+
+<h4>SMS Purchases</h4>
+
+<h2 id="totalSmsPurchases">
+
+--
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Revenue</h4>
+
+<h2 id="totalRevenue">
+
+₦0
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Wallet Deposits</h4>
+
+<h2 id="totalDeposits">
+
+₦0
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<h4>Referral Earnings</h4>
+
+<h2 id="totalReferralEarnings">
+
+₦0
+
+</h2>
+
+</div>
+
+</section>
+
+<section class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<div class="card-header">
+
+<h3>
+
+Recent Orders
+
+</h3>
+
+<a href="admin-orders.html">
+
+View All
+
+</a>
+
+</div>
+
+<div
+id="recentOrders">
+
+<div class="loading">
+
+Loading recent orders...
+
+</div>
+
+</div>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="card-header">
+
+<h3>
+
+Quick Actions
+
+</h3>
+
+</div>
+
+<div class="quick-actions">
+
+<a
+href="admin-products.html"
+class="action-btn">
+
+➕ Add Product
+
+</a>
+
+<a
+href="admin-inventory.html"
+class="action-btn">
+
+📥 Add Inventory
+
+</a>
+
+<a
+href="admin-categories.html"
+class="action-btn">
+
+📂 Categories
+
+</a>
+
+<a
+href="admin-notifications.html"
+class="action-btn">
+
+🔔 Notifications
+
+</a>
+
+<a
+href="admin-wallet.html"
+class="action-btn">
+
+💳 Wallet
+
+</a>
+
+<a
+href="admin-referrals.html"
+class="action-btn">
+
+🎁 Referrals
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="dashboard-card">
+
+<div class="card-header">
+
+<h3>
+
+System Status
+
+</h3>
+
+</div>
+
+<div class="system-status">
+
+<div class="status-item">
+
+<span>
+
+🟢 Database
+
+</span>
+
+<strong
+id="databaseStatus">
+
+Online
+
+</strong>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+👥 Active Admin
+
+</span>
+
+<strong
+id="activeAdmin">
+
+Checking...
+
+</strong>
+
+</div>
+
+<div class="status-item">
+
+<span>
+
+🕒 Last Refresh
+
+</span>
+
+<strong
+id="lastRefresh">
+
+--
+
+</strong>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="admin.js"></script>
+
+</body>
+
+  </html>
