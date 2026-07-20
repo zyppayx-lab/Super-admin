@@ -7,7 +7,7 @@ const SUPABASE_URL =
 
 
 const SUPABASE_ANON_KEY =
-"sb_publishable_KHU_8oYCtAgiBkWM_ShXmw_nO7FKn7G";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaHh0dWt6eG9wd2t2eGVwcGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTA5NzksImV4cCI6MjA5ODc2Njk3OX0.EvzBxG--UmAIDL6dX-cU878tjRRHacazKv9mbEsGgWY";
 
 
 const supabaseClient =
