@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Products | SocialElite Admin</title>
+
+<link rel="stylesheet"
+href="products.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <aside class="sidebar">
+
+        <h2>SocialElite</h2>
+
+        <p>Admin Panel</p>
+
+        <nav>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a class="active"
+            href="products.html">
+                Products
+            </a>
+
+            <a href="inventory.html">
+                Inventory
+            </a>
+
+            <a href="orders.html">
+                Orders
+            </a>
+
+            <a href="users.html">
+                Users
+            </a>
+
+            <a href="wallets.html">
+                Wallets
+            </a>
+
+        </nav>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </aside>
+
+
+
+    <main class="content">
+
+        <header>
+
+            <h1>
+                Product Management
+            </h1>
+
+            <button id="addProductBtn">
+                + Add Product
+            </button>
+
+        </header>
+
+
+
+        <div class="toolbar">
+
+            <input
+            type="search"
+            id="searchInput"
+            placeholder="Search products...">
+
+        </div>
+
+
+
+        <div id="productsContainer">
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- Add Product Modal -->
+
+<div
+id="productModal"
+class="modal">
+
+<div class="modal-content">
+
+<h2>
+Create Product
+</h2>
+
+<form id="productForm">
+
+<select
+id="category"
+required>
+
+<option value="">
+Select Category
+</option>
+
+</select>
+
+
+
+<input
+type="text"
+id="name"
+placeholder="Product Name"
+required>
+
+
+
+<textarea
+id="description"
+placeholder="Description">
+</textarea>
+
+
+
+<input
+type="number"
+id="price"
+placeholder="Price"
+required>
+
+
+
+<input
+type="text"
+id="type"
+placeholder="Type"
+required>
+
+
+
+<select
+id="stockType"
+required>
+
+<option value="">
+Stock Type
+</option>
+
+<option value="manual">
+Manual
+</option>
+
+<option value="automatic">
+Automatic
+</option>
+
+</select>
+
+
+
+<div class="actions">
+
+<button
+type="submit">
+
+Create
+
+</button>
+
+<button
+type="button"
+id="closeModal">
+
+Cancel
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<script src="admin-auth.js"></script>
+
+<script src="products.js"></script>
+
+</body>
+
+</html>
