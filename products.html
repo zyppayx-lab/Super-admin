@@ -21,97 +21,111 @@ href="products.css">
 
 <div class="container">
 
-    <aside class="sidebar">
+<header class="topbar">
 
-        <h2>SocialElite</h2>
+<h1>Product Management</h1>
 
-        <p>Admin Panel</p>
+<div>
 
-        <nav>
+<button id="refreshBtn">
+Refresh
+</button>
 
-            <a href="dashboard.html">
-                Dashboard
-            </a>
+<button id="addProductBtn">
++ Add Product
+</button>
 
-            <a class="active"
-            href="products.html">
-                Products
-            </a>
+</div>
 
-            <a href="inventory.html">
-                Inventory
-            </a>
-
-            <a href="orders.html">
-                Orders
-            </a>
-
-            <a href="users.html">
-                Users
-            </a>
-
-            <a href="wallets.html">
-                Wallets
-            </a>
-
-        </nav>
-
-        <button id="logoutBtn">
-            Logout
-        </button>
-
-    </aside>
+</header>
 
 
 
-    <main class="content">
+<div class="toolbar">
 
-        <header>
-
-            <h1>
-                Product Management
-            </h1>
-
-            <button id="addProductBtn">
-                + Add Product
-            </button>
-
-        </header>
+<input
+type="search"
+id="searchInput"
+placeholder="Search products...">
 
 
+<select id="categoryFilter">
 
-        <div class="toolbar">
+<option value="">
+All Categories
+</option>
 
-            <input
-            type="search"
-            id="searchInput"
-            placeholder="Search products...">
-
-        </div>
-
-
-
-        <div id="productsContainer">
-
-        </div>
-
-    </main>
+</select>
 
 </div>
 
 
 
-<!-- Add Product Modal -->
+<div id="messageBox"></div>
+
+
+
+<table class="products-table">
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Category</th>
+
+<th>Price</th>
+
+<th>Type</th>
+
+<th>Stock</th>
+
+<th>Status</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="productsBody">
+
+<tr>
+
+<td colspan="7">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+
+
+
+<!-- Add/Edit Modal -->
 
 <div
 id="productModal"
-class="modal">
+class="modal hidden">
 
 <div class="modal-content">
 
-<h2>
-Create Product
+<h2 id="modalTitle">
+
+Add Product
+
 </h2>
+
+
 
 <form id="productForm">
 
@@ -150,11 +164,23 @@ required>
 
 
 
-<input
-type="text"
+<select
 id="type"
-placeholder="Type"
 required>
+
+<option value="">
+Type
+</option>
+
+<option value="aged">
+Aged
+</option>
+
+<option value="new">
+New
+</option>
+
+</select>
 
 
 
@@ -178,18 +204,18 @@ Automatic
 
 
 
-<div class="actions">
+<div class="modal-buttons">
 
 <button
 type="submit">
 
-Create
+Save Product
 
 </button>
 
 <button
 type="button"
-id="closeModal">
+id="cancelBtn">
 
 Cancel
 
