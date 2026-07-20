@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard | SocialElite</title>
+
+<link rel="stylesheet" href="dashboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<div class="admin-layout">
+
+
+    <aside class="sidebar">
+
+
+        <h2>
+            SocialElite
+        </h2>
+
+        <p class="admin-label">
+            Admin Panel
+        </p>
+
+
+
+        <nav>
+
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+
+            <a href="products.html">
+                Products
+            </a>
+
+
+            <a href="inventory.html">
+                Inventory
+            </a>
+
+
+            <a href="orders.html">
+                Orders
+            </a>
+
+
+            <a href="users.html">
+                Users
+            </a>
+
+
+            <a href="wallets.html">
+                Wallets
+            </a>
+
+
+        </nav>
+
+
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+
+    </aside>
+
+
+
+
+
+    <main class="content">
+
+
+        <header>
+
+            <h1>
+                Dashboard
+            </h1>
+
+
+            <p id="welcomeText">
+                Loading...
+            </p>
+
+
+        </header>
+
+
+
+
+
+        <section class="stats-grid">
+
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Users
+                </h3>
+
+                <strong id="usersCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Products
+                </h3>
+
+                <strong id="productsCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Inventory
+                </h3>
+
+                <strong id="inventoryCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Orders
+                </h3>
+
+                <strong id="ordersCount">
+                    0
+                </strong>
+
+            </div>
+
+
+
+        </section>
+
+
+
+    </main>
+
+
+</div>
+
+
+
+
+<script src="admin-auth.js"></script>
+
+<script src="dashboard.js"></script>
+
+
+</body>
+
+              </html>
