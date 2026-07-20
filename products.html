@@ -5,13 +5,11 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Products | SocialElite Admin</title>
 
-<link rel="stylesheet"
-href="products.css">
+<link rel="stylesheet" href="products.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -19,195 +17,138 @@ href="products.css">
 
 <body>
 
-<div class="container">
+<div class="layout">
 
-<header class="topbar">
+    <aside class="sidebar">
 
-<h1>Product Management</h1>
+        <h2>SocialElite</h2>
 
-<div>
+        <a href="dashboard.html">Dashboard</a>
 
-<button id="refreshBtn">
-Refresh
-</button>
+        <a class="active" href="products.html">Products</a>
 
-<button id="addProductBtn">
-+ Add Product
-</button>
+        <a href="inventory.html">Inventory</a>
+
+        <a href="orders.html">Orders</a>
+
+        <a href="users.html">Users</a>
+
+        <a href="wallets.html">Wallets</a>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </aside>
+
+
+
+    <main class="content">
+
+        <div class="top-bar">
+
+            <h1>Products</h1>
+
+            <button id="addProductBtn">
+                + Add Product
+            </button>
+
+        </div>
+
+
+
+        <input
+        id="searchInput"
+        type="search"
+        placeholder="Search products...">
+
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Platform</th>
+
+                        <th>Category</th>
+
+                        <th>Country</th>
+
+                        <th>Price</th>
+
+                        <th>Stock</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="productsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
 
 </div>
 
-</header>
 
-
-
-<div class="toolbar">
-
-<input
-type="search"
-id="searchInput"
-placeholder="Search products...">
-
-
-<select id="categoryFilter">
-
-<option value="">
-All Categories
-</option>
-
-</select>
-
-</div>
-
-
-
-<div id="messageBox"></div>
-
-
-
-<table class="products-table">
-
-<thead>
-
-<tr>
-
-<th>Name</th>
-
-<th>Category</th>
-
-<th>Price</th>
-
-<th>Type</th>
-
-<th>Stock</th>
-
-<th>Status</th>
-
-<th>Actions</th>
-
-</tr>
-
-</thead>
-
-<tbody id="productsBody">
-
-<tr>
-
-<td colspan="7">
-
-Loading...
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-
-
-
-
-<!-- Add/Edit Modal -->
 
 <div
 id="productModal"
-class="modal hidden">
+class="modal">
 
 <div class="modal-content">
 
-<h2 id="modalTitle">
-
-Add Product
-
-</h2>
-
-
+<h2>Add Product</h2>
 
 <form id="productForm">
 
-<select
-id="category"
-required>
-
-<option value="">
-Select Category
-</option>
-
-</select>
-
-
+<select id="category"></select>
 
 <input
-type="text"
 id="name"
+type="text"
 placeholder="Product Name"
 required>
 
-
-
 <textarea
 id="description"
-placeholder="Description">
-</textarea>
-
-
+placeholder="Description"></textarea>
 
 <input
-type="number"
 id="price"
+type="number"
 placeholder="Price"
 required>
 
-
-
-<select
+<input
 id="type"
+type="text"
+placeholder="Type"
 required>
 
-<option value="">
-Type
-</option>
-
-<option value="aged">
-Aged
-</option>
-
-<option value="new">
-New
-</option>
-
-</select>
-
-
-
-<select
+<input
 id="stockType"
+type="text"
+placeholder="Stock Type"
 required>
 
-<option value="">
-Stock Type
-</option>
+<div class="buttons">
 
-<option value="manual">
-Manual
-</option>
-
-<option value="automatic">
-Automatic
-</option>
-
-</select>
-
-
-
-<div class="modal-buttons">
-
-<button
-type="submit">
+<button type="submit">
 
 Save Product
 
@@ -215,7 +156,7 @@ Save Product
 
 <button
 type="button"
-id="cancelBtn">
+id="closeModal">
 
 Cancel
 
@@ -237,4 +178,4 @@ Cancel
 
 </body>
 
-</html>
+  </html>
