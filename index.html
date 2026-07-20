@@ -5,174 +5,114 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SocialElite Admin Login</title>
+<title>Admin Login | SocialElite</title>
 
-<link rel="stylesheet"
-href="admin-login.css">
+<link rel="stylesheet" href="admin-login.css">
 
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-<div class="background-glow glow1"></div>
-<div class="background-glow glow2"></div>
+<div class="background-glow glow-one"></div>
 
-<div class="login-container">
+<div class="background-glow glow-two"></div>
 
-<div class="login-card">
+<main class="login-container">
 
-<div class="logo-box">
+    <div class="login-card">
 
-<img
-src="images/logo.png"
-alt="SocialElite Logo"
-class="logo">
+        <div class="logo-box">
 
-<h1>SocialElite</h1>
+            <img
+                src="images/logo.png"
+                alt="SocialElite Logo"
+                class="logo">
 
-<p class="portal-text">
-Administrator Portal
-</p>
+            <span class="logo-text">
+                SocialElite
+            </span>
 
-</div>
+        </div>
 
-<div
-id="errorMessage"
-class="error-message"
-style="display:none;">
-</div>
+        <h1>
+            Administrator Login
+        </h1>
 
-<form id="adminLoginForm">
+        <p class="subtitle">
+            Authorized administrators only.
+        </p>
 
-<div class="input-group">
+        <form id="loginForm">
 
-<label for="email">
+            <div class="form-group">
 
-Email Address
+                <label for="email">
+                    Email Address
+                </label>
 
-</label>
+                <input
+                    id="email"
+                    type="email"
+                    autocomplete="email"
+                    required>
 
-<input
-type="email"
-id="email"
-placeholder="admin@socialelite.com"
-required>
+            </div>
 
-</div>
+            <div class="form-group">
 
-<div class="input-group">
+                <label for="password">
+                    Password
+                </label>
 
-<label for="password">
+                <div class="password-wrapper">
 
-Password
+                    <input
+                        id="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required>
 
-</label>
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="toggle-password">
 
-<div class="password-box">
+                        👁
 
-<input
-type="password"
-id="password"
-placeholder="Enter password"
-required>
+                    </button>
 
-<button
-type="button"
-id="togglePassword"
-class="toggle-btn">
+                </div>
 
-👁
+            </div>
 
-</button>
+            <button
+                id="loginBtn"
+                class="login-btn"
+                type="submit">
 
-</div>
+                Login
 
-                                     </div>
-                                     <div class="login-options">
+            </button>
 
-<label class="remember-me">
+        </form>
 
-<input
-type="checkbox"
-id="rememberMe">
+        <div
+            id="message"
+            class="message">
 
-<span>
-Keep me signed in
-</span>
+        </div>
 
-</label>
+    </div>
 
-</div>
-
-<button
-type="submit"
-id="loginBtn"
-class="login-btn">
-
-<span id="loginText">
-Login to Admin Panel
-</span>
-
-<span
-id="loginLoader"
-class="loader"
-style="display:none;">
-</span>
-
-</button>
-
-</form>
-
-<div class="security-box">
-
-<h3>
-🔒 Authorized Personnel Only
-</h3>
-
-<p>
-
-This administration portal is restricted
-to authorized SocialElite administrators.
-
-All login attempts are monitored
-and unauthorized access is prohibited.
-
-</p>
-
-</div>
-
-<div class="admin-footer">
-
-<p>
-
-© 2026 SocialElite
-
-</p>
-
-<p>
-
-Secure Administration System
-
-</p>
-
-</div>
-
-</div>
-
-</div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -180,4 +120,4 @@ Secure Administration System
 
 </body>
 
-</html>
+  </html>
