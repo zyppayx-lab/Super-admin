@@ -5,185 +5,380 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Admin Dashboard | SocialElite</title>
+<title>SocialElite Admin Dashboard</title>
 
-<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet"
+href="dashboard.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
-
 <body>
-
 
 <div class="admin-layout">
 
+    <!-- Sidebar -->
 
     <aside class="sidebar">
 
+        <div class="logo">
 
-        <h2>
-            SocialElite
-        </h2>
+            <h2>SocialElite</h2>
+            <span>Admin Panel</span>
 
-        <p class="admin-label">
-            Admin Panel
-        </p>
-
-
+        </div>
 
         <nav>
 
+            <a href="dashboard.html"
+            class="active">
 
-            <a href="dashboard.html">
                 Dashboard
-            </a>
 
+            </a>
 
             <a href="products.html">
-                Products
-            </a>
 
+                Products
+
+            </a>
 
             <a href="inventory.html">
-                Inventory
-            </a>
 
+                Inventory
+
+            </a>
 
             <a href="orders.html">
-                Orders
-            </a>
 
+                Orders
+
+            </a>
 
             <a href="users.html">
+
                 Users
+
             </a>
 
+            <a href="wallet.html">
 
-            <a href="wallets.html">
-                Wallets
+                Wallet
+
             </a>
 
+            <a href="categories.html">
+
+                Categories
+
+            </a>
+
+            <a href="notifications.html">
+
+                Notifications
+
+            </a>
+
+            <a href="settings.html">
+
+                Settings
+
+            </a>
+
+            <a href="#"
+            id="logoutBtn">
+
+                Logout
+
+            </a>
 
         </nav>
 
-
-
-        <button id="logoutBtn">
-            Logout
-        </button>
-
-
     </aside>
 
+    <!-- Main -->
 
+    <main class="main-content">
 
+        <header class="topbar">
 
+            <div>
 
-    <main class="content">
+                <h1>
 
+                    Dashboard
 
-        <header>
+                </h1>
 
-            <h1>
-                Dashboard
-            </h1>
+                <p>
 
+                    Welcome back Administrator
 
-            <p id="welcomeText">
-                Loading...
-            </p>
+                </p>
 
+            </div>
 
         </header>
 
-
-
-
+        <!-- Stats -->
 
         <section class="stats-grid">
 
-
-
             <div class="stat-card">
 
-                <h3>
-                    Users
-                </h3>
+                <h3>Total Users</h3>
 
-                <strong id="usersCount">
-                    0
-                </strong>
+                <span id="totalUsers">
+
+                    ...
+
+                </span>
 
             </div>
 
-
-
-
             <div class="stat-card">
 
-                <h3>
-                    Products
-                </h3>
+                <h3>Total Products</h3>
 
-                <strong id="productsCount">
-                    0
-                </strong>
+                <span id="totalProducts">
+
+                    ...
+
+                </span>
 
             </div>
 
-
-
-
             <div class="stat-card">
 
-                <h3>
-                    Inventory
-                </h3>
+                <h3>Inventory</h3>
 
-                <strong id="inventoryCount">
-                    0
-                </strong>
+                <span id="totalInventory">
+
+                    ...
+
+                </span>
 
             </div>
 
-
-
-
             <div class="stat-card">
 
-                <h3>
-                    Orders
-                </h3>
+                <h3>Pending Orders</h3>
 
-                <strong id="ordersCount">
-                    0
-                </strong>
+                <span id="pendingOrders">
+
+                    ...
+
+                </span>
 
             </div>
 
+            <div class="stat-card">
 
+                <h3>Total Revenue</h3>
+
+                <span id="totalRevenue">
+
+                    ₦0
+
+                </span>
+
+            </div>
+
+        </section>
+        <!-- Quick Actions -->
+
+        <section class="quick-actions">
+
+            <h2>
+
+                Quick Actions
+
+            </h2>
+
+            <div class="action-grid">
+
+                <a
+                href="products.html"
+                class="action-card">
+
+                    <h3>
+
+                        Products
+
+                    </h3>
+
+                    <p>
+
+                        Create, edit and delete products.
+
+                    </p>
+
+                </a>
+
+                <a
+                href="inventory.html"
+                class="action-card">
+
+                    <h3>
+
+                        Inventory
+
+                    </h3>
+
+                    <p>
+
+                        Upload and manage account stock.
+
+                    </p>
+
+                </a>
+
+                <a
+                href="orders.html"
+                class="action-card">
+
+                    <h3>
+
+                        Orders
+
+                    </h3>
+
+                    <p>
+
+                        View customer orders.
+
+                    </p>
+
+                </a>
+
+                <a
+                href="users.html"
+                class="action-card">
+
+                    <h3>
+
+                        Users
+
+                    </h3>
+
+                    <p>
+
+                        Manage registered users.
+
+                    </p>
+
+                </a>
+
+                <a
+                href="wallet.html"
+                class="action-card">
+
+                    <h3>
+
+                        Wallet
+
+                    </h3>
+
+                    <p>
+
+                        View deposits and transactions.
+
+                    </p>
+
+                </a>
+
+                <a
+                href="notifications.html"
+                class="action-card">
+
+                    <h3>
+
+                        Notifications
+
+                    </h3>
+
+                    <p>
+
+                        Send announcements.
+
+                    </p>
+
+                </a>
+
+            </div>
 
         </section>
 
 
 
-    </main>
 
+
+        <!-- Recent Orders -->
+
+        <section class="orders-section">
+
+            <div class="section-header">
+
+                <h2>
+
+                    Recent Orders
+
+                </h2>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Product</th>
+
+                            <th>Amount</th>
+
+                            <th>Status</th>
+
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                    id="recentOrders">
+
+                        <tr>
+
+                            <td
+                            colspan="4">
+
+                                Loading...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
-
-
-
-<script src="admin-auth.js"></script>
-
 <script src="dashboard.js"></script>
-
 
 </body>
 
-              </html>
+                    </html>
