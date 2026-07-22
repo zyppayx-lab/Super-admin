@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Create Product</title>
+
+    <link
+        rel="stylesheet"
+        href="create-product.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="page-header">
+
+        <div>
+
+            <h1>Create Product</h1>
+
+            <p>
+                Add a new marketplace product
+            </p>
+
+        </div>
+
+        <a
+            href="products.html"
+            class="back-btn">
+
+            ← Back to Products
+
+        </a>
+
+    </header>
+
+    <form
+        id="productForm"
+        class="product-form">
+
+        <div class="card">
+
+            <h2>
+                Product Images
+            </h2>
+
+            <div class="image-grid">
+
+                <div class="image-box">
+
+                    <img
+                        id="preview1"
+                        src=""
+                        alt="">
+
+                    <input
+                        type="file"
+                        id="image1"
+                        accept="image/*"
+                        required>
+
+                </div>
+
+                <div class="image-box">
+
+                    <img
+                        id="preview2"
+                        src=""
+                        alt="">
+
+                    <input
+                        type="file"
+                        id="image2"
+                        accept="image/*">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+                Product Details
+            </h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Product Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Category
+
+                    </label>
+
+                    <select
+                        id="category"
+                        required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                    </select>
+
+                </div>
+                <div class="form-group">
+
+                    <label>
+
+                        Description
+
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="5"
+                        placeholder="Product description..."></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Price (₦)
+
+                    </label>
+
+                    <input
+                        type="number"
+                        id="price"
+                        min="0"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Country
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="country"
+                        placeholder="e.g. United States"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Status
+
+                    </label>
+
+                    <select
+                        id="status"
+                        required>
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Stock Type
+
+                    </label>
+
+                    <select
+                        id="stockType"
+                        required>
+
+                        <option value="manual">
+                            Manual Inventory
+                        </option>
+
+                        <option value="unlimited">
+                            Unlimited
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                type="submit"
+                class="save-btn">
+
+                Create Product
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="create-product.js"></script>
+
+</body>
+
+                      </html>
