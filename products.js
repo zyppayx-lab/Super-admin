@@ -1,130 +1,170 @@
-// ======================================
-// Supabase
-// ======================================
-
 const SUPABASE_URL =
 "https://dohxtukzxopwkvxeppdl.supabase.co";
 
 const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvaHh0dWt6eG9wd2t2eGVwcGRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxOTA5NzksImV4cCI6MjA5ODc2Njk3OX0.EvzBxG--UmAIDL6dX-cU878tjRRHacazKv9mbEsGgWY";
+"sb_publishable_KHU_8oYCtAgiBkWM_ShXmw_nO7FKnG7";
 
 const supabaseClient =
-window.supabase.createClient(
+supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
 );
 
-// ======================================
-// Elements
-// ======================================
-
-const table =
-document.getElementById("productsTable");
-
-const modal =
-document.getElementById("productModal");
-
-const addBtn =
-document.getElementById("addProductBtn");
-
-const closeBtn =
-document.getElementById("closeModal");
-
-const form =
-document.getElementById("productForm");
-
-const categorySelect =
-document.getElementById("category");
+const productsGrid =
+document.getElementById("productsGrid");
 
 const searchInput =
 document.getElementById("searchInput");
 
-// ======================================
-// Variables
-// ======================================
+const platformFilter =
+document.getElementById("platformFilter");
 
-let adminId = null;
+const countryFilter =
+document.getElementById("countryFilter");
 
-let allProducts = [];
+const template =
+document.getElementById("productTemplate");
 
-let categories = [];
+let products = [];
 
-// ======================================
-// Initialize
-// ======================================
+let filteredProducts = [];
 
-document.addEventListener(
-"DOMContentLoaded",
-async()=>{
+const DEFAULT_IMAGE =
+"https://placehold.co/600x400?text=No+Image";
 
-    const allowed =
-    await checkAdminAccess();
+async function checkAdmin(){
 
-    if(!allowed){
-        return;
+    const {data,error} =
+    await supabaseClient.auth.getUser();
+
+    if(error || !data.user){
+
+        window.location.href =
+        "../login.html";
+
+        return null;
+
     }
 
-    adminId =
-    window.adminUser.id;
+    const {data:isAdmin,error:adminError} =
+    await supabaseClient.rpc(
+        "is_admin",
+        {
+            p_user_id:data.user.id
+        }
+    );
 
-    await loadCategories();
+    if(adminError || !isAdmin){
 
-    await loadProducts();
+        window.location.href =
+        "../index.html";
 
-});
-// ======================================
-// Load Categories
-// ======================================
+        return null;
 
-async function loadCategories(){
+    }
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-    .from("categories")
-    .select("id,name,platform")
-    .order("platform")
-    .order("name");
+    return data.user;
 
+}
 
+function formatMoney(amount){
 
-    if(error){
+    return "₦" +
+    Number(amount || 0)
+    .toLocaleString();
+
+}
+
+async function loadProducts(){
+
+    try{
+
+        const {data,error} =
+        await supabaseClient
+        .from("marketplace_products")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        products =
+        data || [];
+
+        filteredProducts =
+        [...products];
+
+        loadFilters();
+
+        renderProducts();
+
+    }catch(error){
 
         console.error(error);
 
-        alert(
-            error.message
-        );
+        productsGrid.innerHTML = `
 
-        return;
+        <div class="empty">
+
+            Failed to load products
+
+        </div>
+
+        `;
 
     }
 
+}
 
+function loadFilters(){
 
-    categories = data || [];
+    platformFilter.innerHTML =
 
-
-
-    categorySelect.innerHTML =
-
-    `<option value="">
-        Select Category
+    `<option value="all">
+    All Platforms
     </option>`;
 
+    countryFilter.innerHTML =
 
+    `<option value="all">
+    All Countries
+    </option>`;
 
-    categories.forEach(category=>{
+    [...new Set(products.map(
+        p=>p.platform
+    ))]
+    .forEach(platform=>{
 
-        categorySelect.innerHTML += `
+        platformFilter.innerHTML += `
 
-        <option value="${category.id}">
+        <option value="${platform}">
 
-            ${category.platform}
-            -
-            ${category.name}
+            ${platform}
+
+        </option>
+
+        `;
+
+    });
+
+    [...new Set(products.map(
+        p=>p.country
+    ))]
+    .forEach(country=>{
+
+        countryFilter.innerHTML += `
+
+        <option value="${country}">
+
+            ${country}
 
         </option>
 
@@ -133,79 +173,17 @@ async function loadCategories(){
     });
 
 }
-// ======================================
-// Load Products
-// ======================================
+function renderProducts(){
 
-async function loadProducts(){
+    if(filteredProducts.length===0){
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-    .from("available_products")
-    .select("*")
-    .order("created_at",{
-        ascending:false
-    });
+        productsGrid.innerHTML = `
 
+        <div class="empty">
 
+            No products found
 
-
-    if(error){
-
-        console.error(error);
-
-        alert(error.message);
-
-        return;
-
-    }
-
-
-
-
-    allProducts =
-    data || [];
-
-
-
-    renderProducts(
-        allProducts
-    );
-
-}
-
-
-
-
-
-// ======================================
-// Render Products
-// ======================================
-
-function renderProducts(products){
-
-    table.innerHTML = "";
-
-
-
-    if(products.length===0){
-
-        table.innerHTML =
-
-        `
-
-        <tr>
-
-        <td colspan="8">
-
-        No products found.
-
-        </td>
-
-        </tr>
+        </div>
 
         `;
 
@@ -213,303 +191,225 @@ function renderProducts(products){
 
     }
 
+    productsGrid.innerHTML = "";
 
+    filteredProducts.forEach(product=>{
 
+        productsGrid.innerHTML += `
 
-    products.forEach(product=>{
+        <div class="product-card">
 
+            <div class="product-images">
 
-        table.innerHTML += `
+                <img
+                    class="main-image"
+                    src="${product.image_url || DEFAULT_IMAGE}"
+                    alt="${product.name}"
+                >
 
-<tr>
+                <img
+                    class="small-image"
+                    src="${product.image_url_2 || product.image_url || DEFAULT_IMAGE}"
+                    alt="${product.name}"
+                >
 
-<td>
+            </div>
 
-${product.name}
+            <div class="product-content">
 
-</td>
+                <h3 class="product-name">
 
-<td>
+                    ${product.name}
 
-${product.platform}
+                </h3>
 
-</td>
+                <p class="product-description">
 
-<td>
+                    ${product.description || ""}
 
-${product.category}
+                </p>
 
-</td>
+                <div class="product-details">
 
-<td>
+                    <div>
+                        <strong>Platform:</strong>
+                        ${product.platform}
+                    </div>
 
-${product.country}
+                    <div>
+                        <strong>Country:</strong>
+                        ${product.country}
+                    </div>
 
-</td>
+                    <div>
+                        <strong>Category:</strong>
+                        ${product.category}
+                    </div>
 
-<td>
+                    <div>
+                        <strong>Stock:</strong>
+                        ${product.stock}
+                    </div>
 
-₦${Number(product.price).toLocaleString()}
+                    <div>
+                        <strong>Status:</strong>
 
-</td>
+                        <span class="status">
+                            ${product.status}
+                        </span>
+                    </div>
 
-<td>
+                </div>
 
-${product.stock}
+                <div class="product-price">
 
-</td>
+                    ${formatMoney(product.price)}
 
-<td>
+                </div>
 
-<span class="status active">
+                <div class="product-actions">
 
-Available
+                    <button
+                        class="edit-btn"
+                        onclick="editProduct('${product.id}')">
 
-</span>
+                        Edit
 
-</td>
+                    </button>
 
-<td>
+                    <button
+                        class="delete-btn"
+                        onclick="deleteProduct('${product.id}')">
 
-<button
-class="action-btn edit-btn"
-data-id="${product.id}">
+                        Delete
 
-Edit
+                    </button>
 
-</button>
+                </div>
 
-<button
-class="action-btn delete-btn"
-data-id="${product.id}">
+            </div>
 
-Delete
+        </div>
 
-</button>
-
-</td>
-
-</tr>
-
-`;
+        `;
 
     });
 
+}
 
+function applyFilters(){
 
+    const search =
+    searchInput.value.toLowerCase();
 
-    bindActionButtons();
+    const platform =
+    platformFilter.value;
+
+    const country =
+    countryFilter.value;
+
+    filteredProducts =
+    products.filter(product=>{
+
+        const matchSearch =
+            product.name.toLowerCase().includes(search) ||
+            (product.description || "")
+            .toLowerCase()
+            .includes(search);
+
+        const matchPlatform =
+            platform==="all" ||
+            product.platform===platform;
+
+        const matchCountry =
+            country==="all" ||
+            product.country===country;
+
+        return (
+            matchSearch &&
+            matchPlatform &&
+            matchCountry
+        );
+
+    });
+
+    renderProducts();
 
 }
-// ======================================
-// Search
-// ======================================
 
-searchInput.addEventListener("input",()=>{
+function editProduct(id){
 
-    const keyword =
-    searchInput.value
-    .toLowerCase()
-    .trim();
+    window.location.href =
+    `edit-product.html?id=${id}`;
 
-    const filtered =
-    allProducts.filter(product=>
+}
 
-        product.name
-        .toLowerCase()
-        .includes(keyword)
+async function deleteProduct(id){
 
-        ||
-
-        product.platform
-        .toLowerCase()
-        .includes(keyword)
-
-        ||
-
-        product.category
-        .toLowerCase()
-        .includes(keyword)
-
-        ||
-
-        product.country
-        .toLowerCase()
-        .includes(keyword)
-
-    );
-
-    renderProducts(filtered);
-
-});
-
-
-
-// ======================================
-// Modal
-// ======================================
-
-addBtn.onclick=()=>{
-
-    form.reset();
-
-    form.dataset.mode="create";
-
-    modal.style.display="flex";
-
-};
-
-
-closeBtn.onclick=()=>{
-
-    modal.style.display="none";
-
-};
-
-
-window.onclick=(e)=>{
-
-    if(e.target===modal){
-
-        modal.style.display="none";
-
-    }
-
-};
-
-
-
-// ======================================
-// Create Product
-// ======================================
-
-form.addEventListener("submit",async(e)=>{
-
-    e.preventDefault();
-
-    const payload={
-
-        p_admin_id:adminId,
-
-        p_category_id:category.value,
-
-        p_name:name.value,
-
-        p_description:description.value,
-
-        p_price:Number(price.value),
-
-        p_type:type.value,
-
-        p_stock_type:stockType.value
-
-    };
-
-
-
-    const {error}=
-
-    await supabaseClient.rpc(
-
-        "admin_create_product",
-
-        payload
-
-    );
-
-
-
-    if(error){
-
-        alert(error.message);
-
+    if(!confirm(
+        "Delete this product?"
+    )){
         return;
+    }
+
+    try{
+
+        const {error} =
+        await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id",id);
+
+        if(error){
+
+            throw error;
+
+        }
+
+        await loadProducts();
+
+        alert(
+            "Product deleted successfully."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Failed to delete product."
+        );
 
     }
 
+}
 
+searchInput.addEventListener(
+    "input",
+    applyFilters
+);
 
-    modal.style.display="none";
+platformFilter.addEventListener(
+    "change",
+    applyFilters
+);
 
-    form.reset();
+countryFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+async function init(){
+
+    const user =
+    await checkAdmin();
+
+    if(!user){
+        return;
+    }
 
     await loadProducts();
 
-    alert("Product created successfully.");
-
-});
-
-
-
-// ======================================
-// Edit / Delete
-// ======================================
-
-function bindActionButtons(){
-
-    document
-    .querySelectorAll(".delete-btn")
-    .forEach(btn=>{
-
-        btn.onclick=async()=>{
-
-            if(!confirm("Delete this product?")){
-
-                return;
-
-            }
-
-            const {error}=
-
-            await supabaseClient
-
-            .from("products")
-
-            .delete()
-
-            .eq("id",btn.dataset.id);
-
-            if(error){
-
-                alert(error.message);
-
-                return;
-
-            }
-
-            await loadProducts();
-
-        };
-
-    });
-
-
-
-    document
-    .querySelectorAll(".edit-btn")
-    .forEach(btn=>{
-
-        btn.onclick=()=>{
-
-            window.location.href=
-            `edit-product.html?id=${btn.dataset.id}`;
-
-        };
-
-    });
-
 }
 
-
-
-// ======================================
-// Logout
-// ======================================
-
-document
-.getElementById("logoutBtn")
-.onclick=()=>{
-
-    adminLogout();
-
-};
+init();
