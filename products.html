@@ -1,15 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Products | SocialElite Admin</title>
+<title>Products</title>
 
-<link rel="stylesheet" href="products.css">
+<link
+rel="stylesheet"
+href="products.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -17,165 +22,202 @@
 
 <body>
 
-<div class="layout">
+<div class="container">
 
-    <aside class="sidebar">
+<header class="page-header">
 
-        <h2>SocialElite</h2>
+<h1>
 
-        <a href="dashboard.html">Dashboard</a>
+Products
 
-        <a class="active" href="products.html">Products</a>
+</h1>
 
-        <a href="inventory.html">Inventory</a>
+<p>
 
-        <a href="orders.html">Orders</a>
+Manage marketplace products
 
-        <a href="users.html">Users</a>
+</p>
 
-        <a href="wallets.html">Wallets</a>
+<a
+href="create-product.html"
+class="create-btn">
 
-        <button id="logoutBtn">
-            Logout
-        </button>
++ Create Product
 
-    </aside>
+</a>
 
+</header>
 
+<div class="controls">
 
-    <main class="content">
+<input
+type="text"
+id="searchInput"
+placeholder="Search products">
 
-        <div class="top-bar">
+<select id="platformFilter">
 
-            <h1>Products</h1>
+<option value="all">
 
-            <button id="addProductBtn">
-                + Add Product
-            </button>
+All Platforms
 
-        </div>
+</option>
 
+</select>
 
+<select id="countryFilter">
 
-        <input
-        id="searchInput"
-        type="search"
-        placeholder="Search products...">
+<option value="all">
 
+All Countries
 
+</option>
 
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>Name</th>
-
-                        <th>Platform</th>
-
-                        <th>Category</th>
-
-                        <th>Country</th>
-
-                        <th>Price</th>
-
-                        <th>Stock</th>
-
-                        <th>Status</th>
-
-                        <th>Actions</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="productsTable">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </main>
+</select>
 
 </div>
-
-
 
 <div
-id="productModal"
-class="modal">
+class="products-grid"
+id="productsGrid">
 
-<div class="modal-content">
+<div class="loading">
 
-<h2>Add Product</h2>
-
-<form id="productForm">
-
-<select id="category"></select>
-
-<input
-id="name"
-type="text"
-placeholder="Product Name"
-required>
-
-<textarea
-id="description"
-placeholder="Description"></textarea>
-
-<input
-id="price"
-type="number"
-placeholder="Price"
-required>
-
-<input
-id="type"
-type="text"
-placeholder="Type"
-required>
-
-<input
-id="stockType"
-type="text"
-placeholder="Stock Type"
-required>
-
-<div class="buttons">
-
-<button type="submit">
-
-Save Product
-
-</button>
-
-<button
-type="button"
-id="closeModal">
-
-Cancel
-
-</button>
-
-</div>
-
-</form>
+Loading products...
 
 </div>
 
 </div>
+        <template id="productTemplate">
 
+            <div class="product-card">
 
+                <div class="product-images">
 
-<script src="admin-auth.js"></script>
+                    <img
+                    class="main-image"
+                    src=""
+                    alt="Product Image">
 
-<script src="products.js"></script>
+                    <img
+                    class="small-image"
+                    src=""
+                    alt="Product Thumbnail">
+
+                </div>
+
+                <div class="product-content">
+
+                    <h3 class="product-name">
+
+                        Product Name
+
+                    </h3>
+
+                    <p class="product-description">
+
+                        Description
+
+                    </p>
+
+                    <div class="product-details">
+
+                        <span>
+
+                            <strong>Platform:</strong>
+
+                            <span class="platform">
+
+                                -
+
+                            </span>
+
+                        </span>
+
+                        <span>
+
+                            <strong>Country:</strong>
+
+                            <span class="country">
+
+                                -
+
+                            </span>
+
+                        </span>
+
+                        <span>
+
+                            <strong>Category:</strong>
+
+                            <span class="category">
+
+                                -
+
+                            </span>
+
+                        </span>
+
+                        <span>
+
+                            <strong>Stock:</strong>
+
+                            <span class="stock">
+
+                                0
+
+                            </span>
+
+                        </span>
+
+                        <span>
+
+                            <strong>Status:</strong>
+
+                            <span class="status">
+
+                                Active
+
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                    <div class="product-price">
+
+                        ₦0
+
+                    </div>
+
+                    <div class="product-actions">
+
+                        <button
+                        class="edit-btn">
+
+                            Edit
+
+                        </button>
+
+                        <button
+                        class="delete-btn">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </template>
+
+    </div>
+
+    <script src="products.js"></script>
 
 </body>
 
-  </html>
+                        </html>
