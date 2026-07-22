@@ -81,7 +81,7 @@ async function loadProducts(){
 
         const {data,error} =
         await supabaseClient
-        .from("marketplace_products")
+        .from("admin_products_view")
         .select("*")
         .order(
             "created_at",
