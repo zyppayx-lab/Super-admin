@@ -10,34 +10,27 @@ supabase.createClient(
     SUPABASE_ANON_KEY
 );
 
-const productForm =
-document.getElementById("productForm");
+const productsGrid =
+document.getElementById("productsGrid");
 
-const categorySelect =
-document.getElementById("category");
+const searchInput =
+document.getElementById("searchInput");
 
-const platformInput =
-document.getElementById("platform");
+const platformFilter =
+document.getElementById("platformFilter");
 
-const typeInput =
-document.getElementById("type");
+const countryFilter =
+document.getElementById("countryFilter");
 
-const preview1 =
-document.getElementById("preview1");
+const template =
+document.getElementById("productTemplate");
 
-const preview2 =
-document.getElementById("preview2");
+let products = [];
 
-const image1 =
-document.getElementById("image1");
+let filteredProducts = [];
 
-const image2 =
-document.getElementById("image2");
-
-const saveButton =
-document.querySelector(".save-btn");
-
-let categories = [];
+const DEFAULT_IMAGE =
+"https://placehold.co/600x400?text=No+Image";
 
 async function checkAdmin(){
 
@@ -46,7 +39,9 @@ async function checkAdmin(){
 
     if(error || !data.user){
 
-        window.location.href="../login.html";
+        window.location.href =
+        "../login.html";
+
         return null;
 
     }
@@ -61,9 +56,8 @@ async function checkAdmin(){
 
     if(adminError || !isAdmin){
 
-        alert("Access denied.");
-
-        window.location.href="../index.html";
+        window.location.href =
+        "../index.html";
 
         return null;
 
@@ -73,32 +67,104 @@ async function checkAdmin(){
 
 }
 
-async function loadCategories(){
+function formatMoney(amount){
 
-    const {data,error} =
-    await supabaseClient
-    .from("categories")
-    .select("*")
-    .order("name");
+    return "₦" +
+    Number(amount || 0)
+    .toLocaleString();
 
-    if(error){
+}
 
-        throw error;
+async function loadProducts(){
+
+    try{
+
+        const {data,error} =
+        await supabaseClient
+        .from("marketplace_products")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        products =
+        data || [];
+
+        filteredProducts =
+        [...products];
+
+        loadFilters();
+
+        renderProducts();
+
+    }catch(error){
+
+        console.error(error);
+
+        productsGrid.innerHTML = `
+
+        <div class="empty">
+
+            Failed to load products
+
+        </div>
+
+        `;
 
     }
 
-    categories = data;
+}
 
-    categorySelect.innerHTML =
-    `<option value="">Select Category</option>`;
+function loadFilters(){
 
-    data.forEach(category=>{
+    platformFilter.innerHTML =
 
-        categorySelect.innerHTML += `
+    `<option value="all">
+    All Platforms
+    </option>`;
 
-        <option value="${category.id}">
+    countryFilter.innerHTML =
 
-            ${category.name}
+    `<option value="all">
+    All Countries
+    </option>`;
+
+    [...new Set(products.map(
+        p=>p.platform
+    ))]
+    .forEach(platform=>{
+
+        platformFilter.innerHTML += `
+
+        <option value="${platform}">
+
+            ${platform}
+
+        </option>
+
+        `;
+
+    });
+
+    [...new Set(products.map(
+        p=>p.country
+    ))]
+    .forEach(country=>{
+
+        countryFilter.innerHTML += `
+
+        <option value="${country}">
+
+            ${country}
 
         </option>
 
@@ -107,162 +173,192 @@ async function loadCategories(){
     });
 
 }
+function renderProducts(){
 
-categorySelect.addEventListener(
-"change",
-()=>{
+    if(filteredProducts.length===0){
 
-    const category =
-    categories.find(
-        item=>item.id===categorySelect.value
-    );
+        productsGrid.innerHTML = `
 
-    if(!category){
+        <div class="empty">
 
-        platformInput.value="";
-        typeInput.value="";
+            No products found
 
-        return;
+        </div>
 
-    }
-
-    platformInput.value =
-    category.platform;
-
-    typeInput.value =
-    category.type;
-
-});
-
-function previewImage(fileInput,image){
-
-    if(!fileInput.files.length){
+        `;
 
         return;
 
     }
 
-    image.src =
-    URL.createObjectURL(
-        fileInput.files[0]
-    );
+    productsGrid.innerHTML = "";
+
+    filteredProducts.forEach(product=>{
+
+        productsGrid.innerHTML += `
+
+        <div class="product-card">
+
+            <div class="product-images">
+
+                <img
+                    class="main-image"
+                    src="${product.image_url || DEFAULT_IMAGE}"
+                    alt="${product.name}"
+                >
+
+                <img
+                    class="small-image"
+                    src="${product.image_url_2 || product.image_url || DEFAULT_IMAGE}"
+                    alt="${product.name}"
+                >
+
+            </div>
+
+            <div class="product-content">
+
+                <h3 class="product-name">
+
+                    ${product.name}
+
+                </h3>
+
+                <p class="product-description">
+
+                    ${product.description || ""}
+
+                </p>
+
+                <div class="product-details">
+
+                    <div>
+                        <strong>Platform:</strong>
+                        ${product.platform}
+                    </div>
+
+                    <div>
+                        <strong>Country:</strong>
+                        ${product.country}
+                    </div>
+
+                    <div>
+                        <strong>Category:</strong>
+                        ${product.category}
+                    </div>
+
+                    <div>
+                        <strong>Stock:</strong>
+                        ${product.stock}
+                    </div>
+
+                    <div>
+                        <strong>Status:</strong>
+
+                        <span class="status">
+                            ${product.status}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="product-price">
+
+                    ${formatMoney(product.price)}
+
+                </div>
+
+                <div class="product-actions">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editProduct('${product.id}')">
+
+                        Edit
+
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteProduct('${product.id}')">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
 
 }
 
-image1.addEventListener(
-"change",
-()=>previewImage(image1,preview1)
-);
+function applyFilters(){
 
-image2.addEventListener(
-"change",
-()=>previewImage(image2,preview2)
-);
-async function uploadImage(file){
+    const search =
+    searchInput.value.toLowerCase();
 
-    if(!file){
+    const platform =
+    platformFilter.value;
 
-        return null;
+    const country =
+    countryFilter.value;
 
-    }
+    filteredProducts =
+    products.filter(product=>{
 
-    const extension =
-    file.name.split(".").pop();
+        const matchSearch =
+            product.name.toLowerCase().includes(search) ||
+            (product.description || "")
+            .toLowerCase()
+            .includes(search);
 
-    const fileName =
-    `${crypto.randomUUID()}.${extension}`;
+        const matchPlatform =
+            platform==="all" ||
+            product.platform===platform;
 
-    const filePath =
-    `products/${fileName}`;
+        const matchCountry =
+            country==="all" ||
+            product.country===country;
 
-    const {error} =
-    await supabaseClient
-    .storage
-    .from("product-images")
-    .upload(
-        filePath,
-        file,
-        {
-            upsert:false
-        }
-    );
-
-    if(error){
-
-        throw error;
-
-    }
-
-    const {data} =
-    supabaseClient
-    .storage
-    .from("product-images")
-    .getPublicUrl(filePath);
-
-    return data.publicUrl;
-
-}
-
-productForm.addEventListener(
-"submit",
-async(event)=>{
-
-    event.preventDefault();
-
-    saveButton.disabled = true;
-
-    saveButton.textContent =
-    "Creating...";
-
-    try{
-
-        const imageUrl1 =
-        await uploadImage(
-            image1.files[0]
+        return (
+            matchSearch &&
+            matchPlatform &&
+            matchCountry
         );
 
-        const imageUrl2 =
-        image2.files.length
-        ? await uploadImage(
-            image2.files[0]
-        )
-        : null;
+    });
+
+    renderProducts();
+
+}
+
+function editProduct(id){
+
+    window.location.href =
+    `edit-product.html?id=${id}`;
+
+}
+
+async function deleteProduct(id){
+
+    if(!confirm(
+        "Delete this product?"
+    )){
+        return;
+    }
+
+    try{
 
         const {error} =
         await supabaseClient
         .from("products")
-        .insert({
-
-            category_id:
-            categorySelect.value,
-
-            name:
-            document.getElementById("name").value.trim(),
-
-            description:
-            document.getElementById("description").value.trim(),
-
-            price:
-            Number(
-                document.getElementById("price").value
-            ),
-
-            country:
-            document.getElementById("country").value.trim(),
-
-            status:
-            document.getElementById("status").value,
-
-            stock_type:
-            document.getElementById("stockType").value,
-
-            image_url:
-            imageUrl1,
-
-            image_url_2:
-            imageUrl2
-
-        });
+        .delete()
+        .eq("id",id);
 
         if(error){
 
@@ -270,54 +366,49 @@ async(event)=>{
 
         }
 
-        alert(
-            "Product created successfully."
-        );
+        await loadProducts();
 
-        window.location.href =
-        "products.html";
+        alert(
+            "Product deleted successfully."
+        );
 
     }catch(error){
 
         console.error(error);
 
-        alert(error.message);
-
-    }finally{
-
-        saveButton.disabled = false;
-
-        saveButton.textContent =
-        "Create Product";
+        alert(
+            "Failed to delete product."
+        );
 
     }
 
-});
+}
+
+searchInput.addEventListener(
+    "input",
+    applyFilters
+);
+
+platformFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+countryFilter.addEventListener(
+    "change",
+    applyFilters
+);
 
 async function init(){
 
-    try{
+    const user =
+    await checkAdmin();
 
-        const admin =
-        await checkAdmin();
-
-        if(!admin){
-
-            return;
-
-        }
-
-        await loadCategories();
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Failed to initialize page."
-        );
-
+    if(!user){
+        return;
     }
+
+    await loadProducts();
 
 }
 
