@@ -10,13 +10,11 @@
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Products</title>
+<title>Create Product</title>
 
 <link
 rel="stylesheet"
-href="products.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+href="create-product.css">
 
 </head>
 
@@ -26,50 +24,193 @@ href="products.css">
 
 <header class="page-header">
 
-<h1>
+<div>
 
-Products
-
-</h1>
+<h1>Create Product</h1>
 
 <p>
-
-Manage marketplace products
-
+Add a new marketplace product
 </p>
 
-<a
-href="create-product.html"
-class="create-btn">
+</div>
 
-+ Create Product
+<a
+href="products.html"
+class="back-btn">
+
+← Back
 
 </a>
 
 </header>
 
-<div class="controls">
+<form
+id="productForm">
+
+<div class="card">
+
+<h2>
+Product Images
+</h2>
+
+<div class="image-grid">
+
+<div class="image-card">
+
+<img
+id="preview1"
+src=""
+alt="">
+
+<label for="image1">
+
+Choose Main Image
+
+</label>
+
+<input
+type="file"
+id="image1"
+accept="image/*"
+required>
+
+</div>
+
+<div class="image-card">
+
+<img
+id="preview2"
+src=""
+alt="">
+
+<label for="image2">
+
+Choose Second Image
+
+</label>
+
+<input
+type="file"
+id="image2"
+accept="image/*">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+Product Information
+</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Product Name
+
+</label>
 
 <input
 type="text"
-id="searchInput"
-placeholder="Search products">
+id="name"
+required>
 
-<select id="platformFilter">
+</div>
 
-<option value="all">
+<div class="form-group">
 
-All Platforms
+<label>
+
+Category
+
+</label>
+
+<select
+id="category"
+required>
+
+<option value="">
+
+Select Category
 
 </option>
 
 </select>
 
-<select id="countryFilter">
+</div>
 
-<option value="all">
+<div class="form-group">
 
-All Countries
+<label>
+
+Description
+
+</label>
+
+<textarea
+id="description"
+rows="5"></textarea>
+
+</div>
+<div class="form-group">
+
+<label>
+
+Price (₦)
+
+</label>
+
+<input
+type="number"
+id="price"
+min="0"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Country
+
+</label>
+
+<input
+type="text"
+id="country"
+placeholder="e.g. United States"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Status
+
+</label>
+
+<select
+id="status"
+required>
+
+<option value="active">
+
+Active
+
+</option>
+
+<option value="inactive">
+
+Inactive
 
 </option>
 
@@ -77,147 +218,108 @@ All Countries
 
 </div>
 
-<div
-class="products-grid"
-id="productsGrid">
+<div class="form-group">
 
-<div class="loading">
+<label>
 
-Loading products...
+Stock Type
+
+</label>
+
+<select
+id="stockType"
+required>
+
+<option value="inventory">
+
+Inventory
+
+</option>
+
+<option value="digital">
+
+Digital
+
+</option>
+
+</select>
 
 </div>
 
 </div>
-        <template id="productTemplate">
 
-            <div class="product-card">
+</div>
 
-                <div class="product-images">
+<div class="card">
 
-                    <img
-                    class="main-image"
-                    src=""
-                    alt="Product Image">
+<h2>
 
-                    <img
-                    class="small-image"
-                    src=""
-                    alt="Product Thumbnail">
+Category Information
 
-                </div>
+</h2>
 
-                <div class="product-content">
+<div class="form-grid">
 
-                    <h3 class="product-name">
+<div class="form-group">
 
-                        Product Name
+<label>
 
-                    </h3>
+Platform
 
-                    <p class="product-description">
+</label>
 
-                        Description
+<input
+type="text"
+id="platform"
+readonly>
 
-                    </p>
+</div>
 
-                    <div class="product-details">
+<div class="form-group">
 
-                        <span>
+<label>
 
-                            <strong>Platform:</strong>
+Type
 
-                            <span class="platform">
+</label>
 
-                                -
+<input
+type="text"
+id="type"
+readonly>
 
-                            </span>
+</div>
 
-                        </span>
+</div>
 
-                        <span>
+<p class="info-text">
 
-                            <strong>Country:</strong>
+Platform and Type are automatically filled based on the selected category.
 
-                            <span class="country">
+</p>
 
-                                -
+</div>
 
-                            </span>
+<div class="actions">
 
-                        </span>
+<button
+type="submit"
+class="save-btn">
 
-                        <span>
+Create Product
 
-                            <strong>Category:</strong>
+</button>
 
-                            <span class="category">
+</div>
 
-                                -
+</form>
 
-                            </span>
+</div>
 
-                        </span>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-                        <span>
-
-                            <strong>Stock:</strong>
-
-                            <span class="stock">
-
-                                0
-
-                            </span>
-
-                        </span>
-
-                        <span>
-
-                            <strong>Status:</strong>
-
-                            <span class="status">
-
-                                Active
-
-                            </span>
-
-                        </span>
-
-                    </div>
-
-                    <div class="product-price">
-
-                        ₦0
-
-                    </div>
-
-                    <div class="product-actions">
-
-                        <button
-                        class="edit-btn">
-
-                            Edit
-
-                        </button>
-
-                        <button
-                        class="delete-btn">
-
-                            Delete
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </template>
-
-    </div>
-
-    <script src="products.js"></script>
+<script src="create-product.js"></script>
 
 </body>
 
-                        </html>
+        </html>
