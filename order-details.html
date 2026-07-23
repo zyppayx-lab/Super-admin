@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -53,6 +52,8 @@ class="back-btn">
 </a>
 
 </header>
+
+<!-- Order Information -->
 
 <div class="card">
 
@@ -140,47 +141,21 @@ Loading...
 
 </div>
 
+<!-- Purchased Items -->
+
 <div class="card">
 
 <h2>
 
-Purchased Product
+Purchased Items
 
 </h2>
 
-<div class="details-grid">
+<div id="itemsContainer">
 
-<div>
+<p>
 
-<strong>Product Name</strong>
-
-<p id="productName">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Quantity</strong>
-
-<p id="quantity">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Price</strong>
-
-<p id="productPrice">
-
-Loading...
+Loading purchased items...
 
 </p>
 
@@ -188,80 +163,7 @@ Loading...
 
 </div>
 
-</div>
-<div class="card">
-
-<h2>
-
-Delivered Account
-
-</h2>
-
-<div class="details-grid">
-
-<div>
-
-<strong>Username / Email</strong>
-
-<p id="accountUsername">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Password</strong>
-
-<p id="accountPassword">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Recovery Email</strong>
-
-<p id="recoveryEmail">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Recovery Password</strong>
-
-<p id="recoveryPassword">
-
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Notes</strong>
-
-<p id="accountNotes">
-
-None
-
-</p>
-
-</div>
-
-</div>
-
-</div>
+<!-- Update Status -->
 
 <div class="card">
 
@@ -312,10 +214,12 @@ Save Changes
 
 </div>
 
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="order-details.js"></script>
 
 </body>
 
-  </html>
+</html>
