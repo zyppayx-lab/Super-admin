@@ -1,0 +1,223 @@
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    background:#0b1120;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+
+}
+
+.container{
+
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
+
+}
+
+.page-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:25px;
+
+}
+
+.page-header h1{
+
+    font-size:30px;
+    margin-bottom:8px;
+
+}
+
+.page-header p{
+
+    color:#94a3b8;
+
+}
+
+.back-btn{
+
+    text-decoration:none;
+    background:#2563eb;
+    color:#ffffff;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:bold;
+    transition:.2s;
+
+}
+
+.back-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.controls{
+
+    margin-bottom:20px;
+
+}
+
+.controls input{
+
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #334155;
+    background:#111827;
+    color:#ffffff;
+    outline:none;
+
+}
+
+.controls input:focus{
+
+    border-color:#2563eb;
+
+}
+
+.table-card{
+
+    background:#111827;
+    border:1px solid #1f2937;
+    border-radius:16px;
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#1e293b;
+
+}
+
+th{
+
+    text-align:left;
+    padding:16px;
+    font-size:14px;
+
+}
+
+td{
+
+    padding:16px;
+    border-top:1px solid #1f2937;
+
+}
+.loading{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    padding:30px;
+
+}
+
+.empty-state{
+
+    background:#111827;
+
+    border:1px solid #1f2937;
+
+    border-radius:16px;
+
+    margin-top:20px;
+
+    padding:40px 20px;
+
+    text-align:center;
+
+}
+
+.empty-state h3{
+
+    margin-bottom:10px;
+
+    font-size:22px;
+
+}
+
+.empty-state p{
+
+    color:#94a3b8;
+
+}
+
+.view-btn{
+
+    display:inline-block;
+
+    background:#2563eb;
+
+    color:#ffffff;
+
+    text-decoration:none;
+
+    padding:10px 16px;
+
+    border-radius:8px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    transition:.2s;
+
+}
+
+.view-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+tbody tr{
+
+    transition:.2s;
+
+}
+
+tbody tr:hover{
+
+    background:#0f172a;
+
+}
+
+@media(max-width:768px){
+
+    .page-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    table{
+
+        min-width:900px;
+
+    }
+
+      }
