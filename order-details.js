@@ -18,11 +18,17 @@ new URLSearchParams(
 const orderIdElement =
 document.getElementById("orderId");
 
+const customerElement =
+document.getElementById("customer");
+
+const customerEmailElement =
+document.getElementById("customerEmail");
+
 const orderStatusElement =
 document.getElementById("orderStatus");
 
-const customerElement =
-document.getElementById("customer");
+const paymentMethodElement =
+document.getElementById("paymentMethod");
 
 const totalAmountElement =
 document.getElementById("totalAmount");
@@ -30,19 +36,14 @@ document.getElementById("totalAmount");
 const createdAtElement =
 document.getElementById("createdAt");
 
-const paymentMethodElement =
-document.getElementById("paymentMethod");
+const itemsContainer =
+document.getElementById("itemsContainer");
 
 const statusSelect =
 document.getElementById("statusSelect");
 
 const saveStatusBtn =
 document.getElementById("saveStatusBtn");
-
-const itemsContainer =
-document.getElementById("itemsContainer");
-
-let currentOrder = null;
 
 function formatMoney(amount){
 
@@ -62,7 +63,7 @@ async function checkAdmin(){
         window.location.href =
         "../login.html";
 
-        return null;
+        return false;
 
     }
 
@@ -76,16 +77,18 @@ async function checkAdmin(){
 
     if(adminError || !isAdmin){
 
-        alert("Access denied");
+        alert(
+            "Access denied."
+        );
 
         window.location.href =
-        "../dashboard.html";
+        "dashboard.html";
 
-        return null;
+        return false;
 
     }
 
-    return data.user;
+    return true;
 
 }
 
@@ -93,84 +96,12 @@ async function loadOrder(){
 
     const {data,error} =
     await supabaseClient
-    .from("orders")
+    .from("admin_order_details_view")
     .select("*")
-    .eq("id",orderId)
-    .single();
-
-    if(error){
-
-        throw error;
-
-    }
-
-    currentOrder = data;
-
-    orderIdElement.textContent =
-    data.id;
-
-    orderStatusElement.textContent =
-    data.status;
-
-    totalAmountElement.textContent =
-    formatMoney(data.total_amount);
-
-    createdAtElement.textContent =
-    new Date(
-        data.created_at
-    ).toLocaleString();
-
-    paymentMethodElement.textContent =
-    data.payment_method || "-";
-
-    statusSelect.value =
-    data.status;
-}
-async function loadCustomer(){
-
-    const {data,error} =
-    await supabaseClient
-    .from("profiles")
-    .select("full_name,email")
-    .eq("id",currentOrder.user_id)
-    .single();
-
-    if(error){
-
-        customerElement.textContent =
-        currentOrder.user_id;
-
-        return;
-
-    }
-
-    customerElement.textContent =
-    `${data.full_name || "Unknown"} (${data.email})`;
-
-}
-
-async function loadItems(){
-
-    const {data,error} =
-    await supabaseClient
-    .from("order_items")
-    .select(`
-        quantity,
-        price,
-        status,
-        products(
-            name
-        ),
-        inventory(
-            username,
-            password,
-            recovery_email,
-            recovery_password,
-            notes,
-            status
-        )
-    `)
-    .eq("order_id",orderId);
+    .eq(
+        "order_id",
+        orderId
+    );
 
     if(error){
 
@@ -180,43 +111,63 @@ async function loadItems(){
 
     if(!data || data.length===0){
 
-        itemsContainer.innerHTML = `
-        <p>
-        No purchased items found.
-        </p>`;
-
-        return;
+        throw new Error(
+            "Order not found."
+        );
 
     }
 
+    const order =
+    data[0];
+
+    orderIdElement.textContent =
+    order.order_id;
+
+    customerElement.textContent =
+    order.customer_name || "-";
+
+    customerEmailElement.textContent =
+    order.customer_email || "-";
+
+    orderStatusElement.textContent =
+    order.order_status;
+
+    paymentMethodElement.textContent =
+    order.payment_method || "-";
+
+    totalAmountElement.textContent =
+    formatMoney(
+        order.total_amount
+    );
+
+    createdAtElement.textContent =
+    new Date(
+        order.created_at
+    ).toLocaleString();
+
+    statusSelect.value =
+    order.order_status;
+
+    renderItems(data);
+
+}
+function renderItems(items){
+
     itemsContainer.innerHTML = "";
 
-    data.forEach(item=>{
-
-        const account =
-        item.inventory || {};
+    items.forEach(item=>{
 
         itemsContainer.innerHTML += `
 
-        <div class="card">
+        <div class="item-card">
+
+            <h3>
+
+            ${item.product_name}
+
+            </h3>
 
             <div class="details-grid">
-
-                <div>
-
-                    <strong>
-
-                    Product
-
-                    </strong>
-
-                    <p>
-
-                    ${item.products?.name || "-"}
-
-                    </p>
-
-                </div>
 
                 <div>
 
@@ -254,13 +205,45 @@ async function loadItems(){
 
                     <strong>
 
-                    Username
+                    Country
 
                     </strong>
 
                     <p>
 
-                    ${account.username || "-"}
+                    ${item.country || "-"}
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <strong>
+
+                    Product Status
+
+                    </strong>
+
+                    <p>
+
+                    ${item.product_status}
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <strong>
+
+                    Username / Email
+
+                    </strong>
+
+                    <p>
+
+                    ${item.username || "-"}
 
                     </p>
 
@@ -276,7 +259,7 @@ async function loadItems(){
 
                     <p>
 
-                    ${account.password || "-"}
+                    ${item.password || "-"}
 
                     </p>
 
@@ -292,7 +275,7 @@ async function loadItems(){
 
                     <p>
 
-                    ${account.recovery_email || "-"}
+                    ${item.recovery_email || "-"}
 
                     </p>
 
@@ -308,23 +291,7 @@ async function loadItems(){
 
                     <p>
 
-                    ${account.recovery_password || "-"}
-
-                    </p>
-
-                </div>
-
-                <div>
-
-                    <strong>
-
-                    Notes
-
-                    </strong>
-
-                    <p>
-
-                    ${account.notes || "-"}
+                    ${item.recovery_password || "-"}
 
                     </p>
 
@@ -340,7 +307,23 @@ async function loadItems(){
 
                     <p>
 
-                    ${account.status || "-"}
+                    ${item.inventory_status || "-"}
+
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <strong>
+
+                    Notes
+
+                    </strong>
+
+                    <p>
+
+                    ${item.notes || "-"}
 
                     </p>
 
@@ -354,8 +337,9 @@ async function loadItems(){
 
     });
 
-      }
-async function updateOrderStatus(){
+}
+
+async function updateStatus(){
 
     saveStatusBtn.disabled = true;
 
@@ -388,16 +372,14 @@ async function updateOrderStatus(){
         statusSelect.value;
 
         alert(
-            "Order status updated successfully."
+            "Order updated successfully."
         );
 
     }catch(error){
 
         console.error(error);
 
-        alert(
-            error.message
-        );
+        alert(error.message);
 
     }finally{
 
@@ -412,17 +394,17 @@ async function updateOrderStatus(){
 
 saveStatusBtn.addEventListener(
 "click",
-updateOrderStatus
+updateStatus
 );
 
 async function init(){
 
     try{
 
-        const admin =
+        const ok =
         await checkAdmin();
 
-        if(!admin){
+        if(!ok){
 
             return;
 
@@ -431,7 +413,7 @@ async function init(){
         if(!orderId){
 
             alert(
-                "Order ID is missing."
+                "Missing order ID."
             );
 
             window.location.href =
@@ -443,22 +425,18 @@ async function init(){
 
         await loadOrder();
 
-        await loadCustomer();
-
-        await loadItems();
-
     }catch(error){
 
         console.error(error);
 
-        alert(
-            "Failed to load order details."
-        );
-
         itemsContainer.innerHTML = `
-            <p>
-                Failed to load order.
-            </p>
+
+        <div class="empty">
+
+        Failed to load order details.
+
+        </div>
+
         `;
 
     }
