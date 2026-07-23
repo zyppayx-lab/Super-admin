@@ -355,3 +355,114 @@ async function loadItems(){
     });
 
       }
+async function updateOrderStatus(){
+
+    saveStatusBtn.disabled = true;
+
+    saveStatusBtn.textContent =
+    "Saving...";
+
+    try{
+
+        const {error} =
+        await supabaseClient
+        .from("orders")
+        .update({
+
+            status:
+            statusSelect.value
+
+        })
+        .eq(
+            "id",
+            orderId
+        );
+
+        if(error){
+
+            throw error;
+
+        }
+
+        orderStatusElement.textContent =
+        statusSelect.value;
+
+        alert(
+            "Order status updated successfully."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            error.message
+        );
+
+    }finally{
+
+        saveStatusBtn.disabled = false;
+
+        saveStatusBtn.textContent =
+        "Save Changes";
+
+    }
+
+}
+
+saveStatusBtn.addEventListener(
+"click",
+updateOrderStatus
+);
+
+async function init(){
+
+    try{
+
+        const admin =
+        await checkAdmin();
+
+        if(!admin){
+
+            return;
+
+        }
+
+        if(!orderId){
+
+            alert(
+                "Order ID is missing."
+            );
+
+            window.location.href =
+            "orders.html";
+
+            return;
+
+        }
+
+        await loadOrder();
+
+        await loadCustomer();
+
+        await loadItems();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Failed to load order details."
+        );
+
+        itemsContainer.innerHTML = `
+            <p>
+                Failed to load order.
+            </p>
+        `;
+
+    }
+
+}
+
+init();
