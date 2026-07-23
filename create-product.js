@@ -228,7 +228,7 @@ async(event)=>{
         )
         : null;
 
-        const {error} =
+        const { data, error } =
         await supabaseClient
         .from("products")
         .insert({
@@ -237,24 +237,39 @@ async(event)=>{
             categorySelect.value,
 
             name:
-            document.getElementById("name").value.trim(),
+            document
+            .getElementById("name")
+            .value
+            .trim(),
 
             description:
-            document.getElementById("description").value.trim(),
+            document
+            .getElementById("description")
+            .value
+            .trim(),
 
             price:
             Number(
-                document.getElementById("price").value
+                document
+                .getElementById("price")
+                .value
             ),
 
             country:
-            document.getElementById("country").value.trim(),
+            document
+            .getElementById("country")
+            .value
+            .trim(),
 
             status:
-            document.getElementById("status").value,
+            document
+            .getElementById("status")
+            .value,
 
             stock_type:
-            document.getElementById("stockType").value,
+            document
+            .getElementById("stockType")
+            .value,
 
             image_url:
             imageUrl1,
@@ -262,7 +277,9 @@ async(event)=>{
             image_url_2:
             imageUrl2
 
-        });
+        })
+        .select()
+        .single();
 
         if(error){
 
@@ -271,11 +288,11 @@ async(event)=>{
         }
 
         alert(
-            "Product created successfully."
+            "Product created successfully. Add inventory now."
         );
 
         window.location.href =
-        "products.html";
+        `inventory.html?product=${data.id}`;
 
     }catch(error){
 
