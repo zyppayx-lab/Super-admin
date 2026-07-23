@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Users
+
+</title>
+
+<link
+rel="stylesheet"
+href="users.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="page-header">
+
+<div>
+
+<h1>
+
+Users
+
+</h1>
+
+<p>
+
+Manage registered users
+
+</p>
+
+</div>
+
+<a
+href="dashboard.html"
+class="back-btn">
+
+← Dashboard
+
+</a>
+
+</header>
+
+<div class="controls">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search by name or email">
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Name
+
+</th>
+
+<th>
+
+Email
+
+</th>
+
+<th>
+
+Wallet
+
+</th>
+
+<th>
+
+Referral Code
+
+</th>
+
+<th>
+
+Role
+
+</th>
+
+<th>
+
+Joined
+
+</th>
+
+<th>
+
+Action
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="usersTable">
+
+<tr>
+
+<td
+colspan="7"
+class="loading">
+
+Loading users...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div
+id="emptyState"
+class="empty-state"
+style="display:none;">
+
+<h3>
+
+No users found
+
+</h3>
+
+<p>
+
+There are no registered users.
+
+</p>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="users.js"></script>
+
+</body>
+
+</html>
