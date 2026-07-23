@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+User Details
+
+</title>
+
+<link
+rel="stylesheet"
+href="user-details.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="page-header">
+
+<div>
+
+<h1>
+
+User Details
+
+</h1>
+
+<p>
+
+View and manage user account
+
+</p>
+
+</div>
+
+<a
+href="users.html"
+class="back-btn">
+
+← Back to Users
+
+</a>
+
+</header>
+
+<div class="card">
+
+<h2>
+
+Profile Information
+
+</h2>
+
+<div class="details-grid">
+
+<div>
+
+<strong>
+
+Full Name
+
+</strong>
+
+<p id="fullName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Email
+
+</strong>
+
+<p id="email">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Role
+
+</strong>
+
+<p id="role">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Wallet Balance
+
+</strong>
+
+<p id="walletBalance">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Referral Code
+
+</strong>
+
+<p id="referralCode">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Joined
+
+</strong>
+
+<p id="createdAt">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Statistics
+
+</h2>
+
+<div class="details-grid">
+
+<div>
+
+<strong>
+
+Total Orders
+
+</strong>
+
+<p id="totalOrders">
+
+0
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Completed Orders
+
+</strong>
+
+<p id="completedOrders">
+
+0
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Total Spent
+
+</strong>
+
+<p id="totalSpent">
+
+₦0
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Referral Earnings
+
+</strong>
+
+<p id="referralEarnings">
+
+₦0
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<div class="card">
+
+<h2>
+
+Recent Orders
+
+</h2>
+
+<div id="ordersContainer">
+
+<div class="loading">
+
+Loading orders...
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Wallet Transactions
+
+</h2>
+
+<div id="transactionsContainer">
+
+<div class="loading">
+
+Loading transactions...
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Account Actions
+
+</h2>
+
+<div class="action-grid">
+
+<button
+id="makeAdminBtn"
+class="action-btn primary">
+
+Make Admin
+
+</button>
+
+<button
+id="removeAdminBtn"
+class="action-btn warning">
+
+Remove Admin
+
+</button>
+
+<button
+id="suspendBtn"
+class="action-btn danger">
+
+Suspend User
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="user-details.js"></script>
+
+</body>
+
+  </html>
