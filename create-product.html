@@ -1,19 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>Create Product</title>
+<title>Create Product</title>
 
-    <link
-        rel="stylesheet"
-        href="create-product.css">
+<link
+rel="stylesheet"
+href="create-product.css">
 
 </head>
 
@@ -21,227 +22,297 @@
 
 <div class="container">
 
-    <header class="page-header">
+<header class="page-header">
 
-        <div>
+<div>
 
-            <h1>Create Product</h1>
+<h1>Create Product</h1>
 
-            <p>
-                Add a new marketplace product
-            </p>
+<p>
+Add a new marketplace product
+</p>
 
-        </div>
+</div>
 
-        <a
-            href="products.html"
-            class="back-btn">
+<a
+href="products.html"
+class="back-btn">
 
-            ← Back to Products
+← Back
 
-        </a>
+</a>
 
-    </header>
+</header>
 
-    <form
-        id="productForm"
-        class="product-form">
+<form
+id="productForm">
 
-        <div class="card">
+<div class="card">
 
-            <h2>
-                Product Images
-            </h2>
+<h2>
+Product Images
+</h2>
 
-            <div class="image-grid">
+<div class="image-grid">
 
-                <div class="image-box">
+<div class="image-card">
 
-                    <img
-                        id="preview1"
-                        src=""
-                        alt="">
+<img
+id="preview1"
+src=""
+alt="">
 
-                    <input
-                        type="file"
-                        id="image1"
-                        accept="image/*"
-                        required>
+<label for="image1">
 
-                </div>
+Choose Main Image
 
-                <div class="image-box">
+</label>
 
-                    <img
-                        id="preview2"
-                        src=""
-                        alt="">
+<input
+type="file"
+id="image1"
+accept="image/*"
+required>
 
-                    <input
-                        type="file"
-                        id="image2"
-                        accept="image/*">
+</div>
 
-                </div>
+<div class="image-card">
 
-            </div>
+<img
+id="preview2"
+src=""
+alt="">
 
-        </div>
+<label for="image2">
 
-        <div class="card">
+Choose Second Image
 
-            <h2>
-                Product Details
-            </h2>
+</label>
 
-            <div class="form-grid">
+<input
+type="file"
+id="image2"
+accept="image/*">
 
-                <div class="form-group">
+</div>
 
-                    <label>
+</div>
 
-                        Product Name
+</div>
 
-                    </label>
+<div class="card">
 
-                    <input
-                        type="text"
-                        id="name"
-                        required>
+<h2>
+Product Information
+</h2>
 
-                </div>
+<div class="form-grid">
 
-                <div class="form-group">
+<div class="form-group">
 
-                    <label>
+<label>
 
-                        Category
+Product Name
 
-                    </label>
+</label>
 
-                    <select
-                        id="category"
-                        required>
+<input
+type="text"
+id="name"
+required>
 
-                        <option value="">
-                            Select Category
-                        </option>
+</div>
 
-                    </select>
+<div class="form-group">
 
-                </div>
-                <div class="form-group">
+<label>
 
-                    <label>
+Category
 
-                        Description
+</label>
 
-                    </label>
+<select
+id="category"
+required>
 
-                    <textarea
-                        id="description"
-                        rows="5"
-                        placeholder="Product description..."></textarea>
+<option value="">
 
-                </div>
+Select Category
 
-                <div class="form-group">
+</option>
 
-                    <label>
+</select>
 
-                        Price (₦)
+</div>
 
-                    </label>
+<div class="form-group">
 
-                    <input
-                        type="number"
-                        id="price"
-                        min="0"
-                        required>
+<label>
 
-                </div>
+Description
 
-                <div class="form-group">
+</label>
 
-                    <label>
+<textarea
+id="description"
+rows="5"></textarea>
 
-                        Country
+</div>
+<div class="form-group">
 
-                    </label>
+<label>
 
-                    <input
-                        type="text"
-                        id="country"
-                        placeholder="e.g. United States"
-                        required>
+Price (₦)
 
-                </div>
+</label>
 
-                <div class="form-group">
+<input
+type="number"
+id="price"
+min="0"
+required>
 
-                    <label>
+</div>
 
-                        Status
+<div class="form-group">
 
-                    </label>
+<label>
 
-                    <select
-                        id="status"
-                        required>
+Country
 
-                        <option value="active">
-                            Active
-                        </option>
+</label>
 
-                        <option value="inactive">
-                            Inactive
-                        </option>
+<input
+type="text"
+id="country"
+placeholder="e.g. United States"
+required>
 
-                    </select>
+</div>
 
-                </div>
+<div class="form-group">
 
-                <div class="form-group">
+<label>
 
-                    <label>
+Status
 
-                        Stock Type
+</label>
 
-                    </label>
+<select
+id="status"
+required>
 
-                    <select
-                        id="stockType"
-                        required>
+<option value="active">
 
-                        <option value="manual">
-                            Manual Inventory
-                        </option>
+Active
 
-                        <option value="unlimited">
-                            Unlimited
-                        </option>
+</option>
 
-                    </select>
+<option value="inactive">
 
-                </div>
+Inactive
 
-            </div>
+</option>
 
-        </div>
+</select>
 
-        <div class="actions">
+</div>
 
-            <button
-                type="submit"
-                class="save-btn">
+<div class="form-group">
 
-                Create Product
+<label>
 
-            </button>
+Stock Type
 
-        </div>
+</label>
 
-    </form>
+<select
+id="stockType"
+required>
+
+<option value="inventory">
+
+Inventory
+
+</option>
+
+<option value="digital">
+
+Digital
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Category Information
+
+</h2>
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>
+
+Platform
+
+</label>
+
+<input
+type="text"
+id="platform"
+readonly>
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Type
+
+</label>
+
+<input
+type="text"
+id="type"
+readonly>
+
+</div>
+
+</div>
+
+<p class="info-text">
+
+Platform and Type are automatically filled based on the selected category.
+
+</p>
+
+</div>
+
+<div class="actions">
+
+<button
+type="submit"
+class="save-btn">
+
+Create Product
+
+</button>
+
+</div>
+
+</form>
 
 </div>
 
@@ -251,4 +322,4 @@
 
 </body>
 
-                      </html>
+    </html>
