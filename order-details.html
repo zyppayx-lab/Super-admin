@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -37,7 +38,7 @@ Order Details
 
 <p>
 
-View and manage customer order
+View customer order, purchased accounts and credentials
 
 </p>
 
@@ -53,13 +54,11 @@ class="back-btn">
 
 </header>
 
-<!-- Order Information -->
-
 <div class="card">
 
 <h2>
 
-Order Information
+Order Summary
 
 </h2>
 
@@ -67,7 +66,11 @@ Order Information
 
 <div>
 
-<strong>Order ID</strong>
+<strong>
+
+Order ID
+
+</strong>
 
 <p id="orderId">
 
@@ -79,19 +82,11 @@ Loading...
 
 <div>
 
-<strong>Status</strong>
+<strong>
 
-<p id="orderStatus">
+Customer
 
-Loading...
-
-</p>
-
-</div>
-
-<div>
-
-<strong>Customer</strong>
+</strong>
 
 <p id="customer">
 
@@ -103,7 +98,59 @@ Loading...
 
 <div>
 
-<strong>Total Amount</strong>
+<strong>
+
+Email
+
+</strong>
+
+<p id="customerEmail">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Status
+
+</strong>
+
+<p id="orderStatus">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Payment Method
+
+</strong>
+
+<p id="paymentMethod">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>
+
+Total Amount
+
+</strong>
 
 <p id="totalAmount">
 
@@ -115,7 +162,11 @@ Loading...
 
 <div>
 
-<strong>Created</strong>
+<strong>
+
+Created At
+
+</strong>
 
 <p id="createdAt">
 
@@ -125,23 +176,9 @@ Loading...
 
 </div>
 
-<div>
-
-<strong>Payment Method</strong>
-
-<p id="paymentMethod">
-
-Loading...
-
-</p>
-
 </div>
 
 </div>
-
-</div>
-
-<!-- Purchased Items -->
 
 <div class="card">
 
@@ -153,18 +190,15 @@ Purchased Items
 
 <div id="itemsContainer">
 
-<p>
+<div class="loading">
 
 Loading purchased items...
 
-</p>
-
 </div>
 
 </div>
 
-<!-- Update Status -->
-
+</div>
 <div class="card">
 
 <h2>
@@ -173,7 +207,13 @@ Update Order Status
 
 </h2>
 
-<div class="action-row">
+<div class="status-section">
+
+<label for="statusSelect">
+
+Order Status
+
+</label>
 
 <select id="statusSelect">
 
@@ -204,7 +244,8 @@ Cancelled
 </select>
 
 <button
-id="saveStatusBtn">
+id="saveStatusBtn"
+class="save-btn">
 
 Save Changes
 
@@ -222,4 +263,4 @@ Save Changes
 
 </body>
 
-</html>
+  </html>
