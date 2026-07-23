@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Orders
+
+</title>
+
+<link
+rel="stylesheet"
+href="orders.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="page-header">
+
+<div>
+
+<h1>
+
+Orders
+
+</h1>
+
+<p>
+
+Manage customer orders
+
+</p>
+
+</div>
+
+<div class="header-actions">
+
+<a
+href="dashboard.html"
+class="back-btn">
+
+← Dashboard
+
+</a>
+
+</div>
+
+</header>
+
+<div class="controls">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Order ID...">
+
+<select
+id="statusFilter">
+
+<option value="all">
+
+All Status
+
+</option>
+
+<option value="pending">
+
+Pending
+
+</option>
+
+<option value="processing">
+
+Processing
+
+</option>
+
+<option value="completed">
+
+Completed
+
+</option>
+
+<option value="cancelled">
+
+Cancelled
+
+</option>
+
+</select>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Order ID
+
+</th>
+
+<th>
+
+Customer
+
+</th>
+
+<th>
+
+Product
+
+</th>
+
+<th>
+
+Amount
+
+</th>
+
+<th>
+
+Status
+
+</th>
+
+<th>
+
+Date
+
+</th>
+
+<th>
+
+Action
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="ordersTable">
+
+<tr>
+
+<td
+colspan="7"
+style="text-align:center;padding:30px;">
+
+Loading orders...
+
+</td>
+
+</tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+<div
+id="emptyState"
+class="empty-state"
+style="display:none;">
+
+<h3>
+
+No Orders Found
+
+</h3>
+
+<p>
+
+There are no orders matching your filters.
+
+</p>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="orders.js"></script>
+
+</body>
+
+  </html>
