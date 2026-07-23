@@ -16,11 +16,11 @@ document.getElementById("productForm");
 const categorySelect =
 document.getElementById("category");
 
-const image1 =
-document.getElementById("image1");
+const platformInput =
+document.getElementById("platform");
 
-const image2 =
-document.getElementById("image2");
+const typeInput =
+document.getElementById("type");
 
 const preview1 =
 document.getElementById("preview1");
@@ -28,8 +28,16 @@ document.getElementById("preview1");
 const preview2 =
 document.getElementById("preview2");
 
+const image1 =
+document.getElementById("image1");
+
+const image2 =
+document.getElementById("image2");
+
 const saveButton =
 document.querySelector(".save-btn");
+
+let categories = [];
 
 async function checkAdmin(){
 
@@ -38,9 +46,7 @@ async function checkAdmin(){
 
     if(error || !data.user){
 
-        window.location.href =
-        "../login.html";
-
+        window.location.href="../login.html";
         return null;
 
     }
@@ -55,8 +61,9 @@ async function checkAdmin(){
 
     if(adminError || !isAdmin){
 
-        window.location.href =
-        "../index.html";
+        alert("Access denied.");
+
+        window.location.href="../index.html";
 
         return null;
 
@@ -68,76 +75,90 @@ async function checkAdmin(){
 
 async function loadCategories(){
 
-    try{
+    const {data,error} =
+    await supabaseClient
+    .from("categories")
+    .select("*")
+    .order("name");
 
-        const {data,error} =
-        await supabaseClient
-        .from("categories")
-        .select("id,name")
-        .order("name");
+    if(error){
 
-        if(error){
-
-            throw error;
-
-        }
-
-        categorySelect.innerHTML = `
-        <option value="">
-            Select Category
-        </option>`;
-
-        data.forEach(category=>{
-
-            categorySelect.innerHTML += `
-
-            <option value="${category.id}">
-
-                ${category.name}
-
-            </option>
-
-            `;
-
-        });
-
-    }catch(error){
-
-        console.error(error);
-
-        alert("Failed to load categories.");
+        throw error;
 
     }
 
+    categories = data;
+
+    categorySelect.innerHTML =
+    `<option value="">Select Category</option>`;
+
+    data.forEach(category=>{
+
+        categorySelect.innerHTML += `
+
+        <option value="${category.id}">
+
+            ${category.name}
+
+        </option>
+
+        `;
+
+    });
+
 }
 
-function previewImage(input,image){
+categorySelect.addEventListener(
+"change",
+()=>{
 
-    const file =
-    input.files[0];
+    const category =
+    categories.find(
+        item=>item.id===categorySelect.value
+    );
 
-    if(!file){
+    if(!category){
+
+        platformInput.value="";
+        typeInput.value="";
+
+        return;
+
+    }
+
+    platformInput.value =
+    category.platform;
+
+    typeInput.value =
+    category.type;
+
+});
+
+function previewImage(fileInput,image){
+
+    if(!fileInput.files.length){
 
         return;
 
     }
 
     image.src =
-    URL.createObjectURL(file);
+    URL.createObjectURL(
+        fileInput.files[0]
+    );
 
 }
 
 image1.addEventListener(
-    "change",
-    ()=>previewImage(image1,preview1)
+"change",
+()=>previewImage(image1,preview1)
 );
 
 image2.addEventListener(
-    "change",
-    ()=>previewImage(image2,preview2)
+"change",
+()=>previewImage(image2,preview2)
 );
-
-async function uploadImage(file,path){
+async function uploadImage(file){
 
     if(!file){
 
@@ -145,15 +166,24 @@ async function uploadImage(file,path){
 
     }
 
+    const extension =
+    file.name.split(".").pop();
+
+    const fileName =
+    `${crypto.randomUUID()}.${extension}`;
+
+    const filePath =
+    `products/${fileName}`;
+
     const {error} =
     await supabaseClient
     .storage
     .from("product-images")
     .upload(
-        path,
+        filePath,
         file,
         {
-            upsert:true
+            upsert:false
         }
     );
 
@@ -167,11 +197,12 @@ async function uploadImage(file,path){
     supabaseClient
     .storage
     .from("product-images")
-    .getPublicUrl(path);
+    .getPublicUrl(filePath);
 
     return data.publicUrl;
 
 }
+
 productForm.addEventListener(
 "submit",
 async(event)=>{
@@ -179,34 +210,21 @@ async(event)=>{
     event.preventDefault();
 
     saveButton.disabled = true;
+
     saveButton.textContent =
-    "Creating Product...";
+    "Creating...";
 
     try{
 
-        const imagePath1 =
-        `products/${Date.now()}_1_${
-            image1.files[0].name
-        }`;
-
-        const imagePath2 =
-        image2.files[0]
-        ? `products/${Date.now()}_2_${
-            image2.files[0].name
-        }`
-        : null;
-
         const imageUrl1 =
         await uploadImage(
-            image1.files[0],
-            imagePath1
+            image1.files[0]
         );
 
         const imageUrl2 =
-        image2.files[0]
+        image2.files.length
         ? await uploadImage(
-            image2.files[0],
-            imagePath2
+            image2.files[0]
         )
         : null;
 
@@ -219,10 +237,10 @@ async(event)=>{
             categorySelect.value,
 
             name:
-            document.getElementById("name").value,
+            document.getElementById("name").value.trim(),
 
             description:
-            document.getElementById("description").value,
+            document.getElementById("description").value.trim(),
 
             price:
             Number(
@@ -230,7 +248,7 @@ async(event)=>{
             ),
 
             country:
-            document.getElementById("country").value,
+            document.getElementById("country").value.trim(),
 
             status:
             document.getElementById("status").value,
@@ -263,10 +281,7 @@ async(event)=>{
 
         console.error(error);
 
-        alert(
-            error.message ||
-            "Failed to create product."
-        );
+        alert(error.message);
 
     }finally{
 
@@ -281,14 +296,28 @@ async(event)=>{
 
 async function init(){
 
-    const admin =
-    await checkAdmin();
+    try{
 
-    if(!admin){
-        return;
+        const admin =
+        await checkAdmin();
+
+        if(!admin){
+
+            return;
+
+        }
+
+        await loadCategories();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Failed to initialize page."
+        );
+
     }
-
-    await loadCategories();
 
 }
 
