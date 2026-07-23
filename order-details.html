@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Order Details
+
+</title>
+
+<link
+rel="stylesheet"
+href="order-details.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="page-header">
+
+<div>
+
+<h1>
+
+Order Details
+
+</h1>
+
+<p>
+
+View and manage customer order
+
+</p>
+
+</div>
+
+<a
+href="orders.html"
+class="back-btn">
+
+← Back to Orders
+
+</a>
+
+</header>
+
+<div class="card">
+
+<h2>
+
+Order Information
+
+</h2>
+
+<div class="details-grid">
+
+<div>
+
+<strong>Order ID</strong>
+
+<p id="orderId">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Status</strong>
+
+<p id="orderStatus">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Customer</strong>
+
+<p id="customer">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Total Amount</strong>
+
+<p id="totalAmount">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Created</strong>
+
+<p id="createdAt">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Payment Method</strong>
+
+<p id="paymentMethod">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Purchased Product
+
+</h2>
+
+<div class="details-grid">
+
+<div>
+
+<strong>Product Name</strong>
+
+<p id="productName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Quantity</strong>
+
+<p id="quantity">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Price</strong>
+
+<p id="productPrice">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+<div class="card">
+
+<h2>
+
+Delivered Account
+
+</h2>
+
+<div class="details-grid">
+
+<div>
+
+<strong>Username / Email</strong>
+
+<p id="accountUsername">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Password</strong>
+
+<p id="accountPassword">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Recovery Email</strong>
+
+<p id="recoveryEmail">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Recovery Password</strong>
+
+<p id="recoveryPassword">
+
+Loading...
+
+</p>
+
+</div>
+
+<div>
+
+<strong>Notes</strong>
+
+<p id="accountNotes">
+
+None
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+
+Update Order Status
+
+</h2>
+
+<div class="action-row">
+
+<select id="statusSelect">
+
+<option value="pending">
+
+Pending
+
+</option>
+
+<option value="processing">
+
+Processing
+
+</option>
+
+<option value="completed">
+
+Completed
+
+</option>
+
+<option value="cancelled">
+
+Cancelled
+
+</option>
+
+</select>
+
+<button
+id="saveStatusBtn">
+
+Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="order-details.js"></script>
+
+</body>
+
+  </html>
